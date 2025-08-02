@@ -10,12 +10,12 @@ POST https://writes-by-siva-server-production.up.railway.app/insert
 Content-Type: application/json
 
 {
-    "id":"js-04",
-    "slug":"closures",
-    "title":"Closures and internals",
-    "description":"Learn about the closures in Javascript",
-    "date":"2025-07-27T18:30:00.000Z",
+    "id":"cp-28",
+    "slug":"graph-bfs",
+    "title":"Graph BFS Traversal",
+    "description":"Given a graph, traverse the graph using BFS",
+    "date":"2025-08-02",
     "primary":"tech",
-    "domains":["javascript"],
-    "filename":"javascript/closures.md"
+    "domains":["competitive-programming","array","dynamic-programming"],
+    "filename":"competitive-programming/graph-bfs.md"
 }

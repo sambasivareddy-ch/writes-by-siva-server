@@ -35,7 +35,8 @@ router.post('/', async (req, res) => {
     } catch(err) {
         res.status(500).json({
             success: false,
-            message: "Error occurred at server"
+            message: "Error occurred at server",
+            err
         })
     }
 })
