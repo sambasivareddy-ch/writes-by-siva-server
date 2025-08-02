@@ -1,0 +1,24 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Post Blog
+        link(rel="stylesheet", href="/css/index.css")
+    body 
+        .blog_wrapper 
+            .blog_post__form 
+                h2 Post a Blog
+                form(action="/post", method="post")
+                    input(type="text", name="id", placeholder="Blog ID")
+                    input(type="text", name="slug", placeholder="Blog Slug ID")
+                    input(type="text", name="title", placeholder="Blog Title")
+                    input(type="text", name="description", placeholder="Add Description")
+                    input(type="date", name="date")
+                    select(name="primary")
+                        option(value="tech") Tech 
+                        option(value="personal") Personal
+                        option(value="tech-events") Tech-Events 
+                    input(type="text", name="domains", placeholder="Array of Domains")
+                    input(type="text", name="filename", placeholder="Filename")
+                    button(type="submit") Post the Blog    
