@@ -5,7 +5,7 @@ const router = Router();
 
 router.post('/', async (req, res) => {
     const { id, slug, title, description, date, primary, domains, filename } = req.body;
-    
+
     try {
         const results = await queryPG(
             `
@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
             `, 
             [
                 id, slug, title, description, date,
-                primary, domains, filename
+                primary, domains.toString(), filename
             ]
         );
 
