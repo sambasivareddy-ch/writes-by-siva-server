@@ -13,10 +13,19 @@ const app = express();
 config();
 
 app.use(cors({
-    origin: process.env.ALLOWEDORIGIN,
+    origin: (origin, callback) => {
+      if (!origin || process.env.ALLOWEDORIGIN.includes(origin)) {
+        // Allow the request from allowed origins or if no origin is provided (e.g., mobile apps)
+        callback(null, true);
+      } else {
+        // Reject requests from other origins
+        callback(new Error('Not allowed by CORS'), false);
+      }
+    },
     methods: 'GET,POST,PUT,DELETE,PATCH',
     credentials: true,
-}));
+  }));
+  
 app.use(express.json())
 
 app.get('/', (req, res) => {
