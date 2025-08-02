@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
     try {
         const results = await queryPG(
             `
-                INSERT INTO blogposts (id, slug, title, description, date, primary_category, domains, filename) 
+                INSERT INTO blogs (id, slug, title, description, date, primary_category, domains, filename) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
                 RETURNING *
             `, 
