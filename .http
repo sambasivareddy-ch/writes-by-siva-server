@@ -10,7 +10,7 @@ POST https://writes-by-siva-server-production.up.railway.app/insert
 Content-Type: application/json
 
 {
-    "id":"cp-28",
+    "id":"cp-29",
     "slug":"graph-bfs",
     "title":"Graph BFS Traversal",
     "description":"Given a graph, traverse the graph using BFS",
