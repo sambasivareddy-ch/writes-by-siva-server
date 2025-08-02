@@ -6,7 +6,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost:5000/insert
+POST https://writes-by-siva-server-production.up.railway.app/insert
 Content-Type: application/json
 
 {
@@ -15,7 +15,7 @@ Content-Type: application/json
     "title":"Closures and internals",
     "description":"Learn about the closures in Javascript",
     "date":"2025-07-27T18:30:00.000Z",
-    "primary_category":"tech",
+    "primary":"tech",
     "domains":["javascript"],
     "filename":"javascript/closures.md"
 }

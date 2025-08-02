@@ -7,7 +7,7 @@ router.get('/:slug', async (req, res) => {
     const { slug } = req.params;
 
     try {
-        const results = await queryPG('SELECT * FROM blog_posts WHERE slug = $1', [slug]);
+        const results = await queryPG('SELECT * FROM blogposts WHERE slug = $1', [slug]);
 
         if (results.rowCount === 0) {
             res.status(201).json({

@@ -18,7 +18,7 @@ router.patch('/:slug', async (req, res) => {
 
     try {
         const results = await queryPG(`
-            UPDATE blog_posts SET ${type} = ${type} + 1, updated_at = NOW() WHERE slug = $1 RETURNING * 
+            UPDATE blogposts SET ${type} = ${type} + 1, updated_at = NOW() WHERE slug = $1 RETURNING * 
         `, [slug]);
 
         if (results.rowCount === 0) {
