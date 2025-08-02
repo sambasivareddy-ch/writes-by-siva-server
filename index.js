@@ -13,7 +13,7 @@ const app = express();
 config();
 
 app.use(cors({
-    origin: 'https://www.bysiva.blog/',
+    origin: process.env.ALLOWEDORIGIN,
     methods: 'GET,POST,PUT,DELETE,PATCH',
     credentials: true,
 }));
