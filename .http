@@ -1,0 +1,21 @@
+PATCH http://localhost:5000/analytics/closures
+Content-Type: application/json
+
+{
+    "type": "likes"
+}
+
+###
+POST http://localhost:5000/insert
+Content-Type: application/json
+
+{
+    "id":"js-04",
+    "slug":"closures",
+    "title":"Closures and internals",
+    "description":"Learn about the closures in Javascript",
+    "date":"2025-07-27T18:30:00.000Z",
+    "primary_category":"tech",
+    "domains":["javascript"],
+    "filename":"javascript/closures.md"
+}
