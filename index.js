@@ -8,6 +8,7 @@ import getPostBySlugRoute from "./routes/getPostBySlug.js";
 import analyticsRoute from "./routes/patchAnalytics.js";
 import insertPostRoute from "./routes/insertPost.js";
 import postBlogRoute from "./routes/postBlog.js";
+import updateReadtimeRoute from './routes/updateReadTime.js';
 
 const app = express();
 
@@ -43,6 +44,7 @@ app.use('/blog', getPostBySlugRoute);
 app.use('/analytics', analyticsRoute);
 app.use('/insert', insertPostRoute);
 app.use('/post', postBlogRoute);
+app.use('/readtime', updateReadtimeRoute);
 
 connectToPg(() => {
     app.listen(process.env.PORT, () => {
