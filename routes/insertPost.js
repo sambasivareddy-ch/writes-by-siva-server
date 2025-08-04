@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { queryPG } from "../db/db.js";
+import notifyDiscord from "../helpers/notifyDiscord.js";
 
 const router = Router();
 
@@ -26,6 +27,8 @@ router.post('/', async (req, res) => {
             })
             return;
         }
+
+        await notifyDiscord(process.env.DISCORD_WEBHOOK, `New Blog has been posted at ${Date.now()} with Title: ${title}`)
 
         res.redirect('/dashboard')
 

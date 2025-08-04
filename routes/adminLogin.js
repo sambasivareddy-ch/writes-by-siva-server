@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { compare } from "bcrypt";
 import { queryPG } from "../db/db.js";
+import notifyDiscord from "../helpers/notifyDiscord.js";
 
 const router = Router()
 
@@ -22,6 +23,7 @@ router.post('/', async (req, res) => {
         const isEqual = await compare(password, row['password']);
         if (isEqual) {
             req.session.admin = username;
+            await notifyDiscord(process.env.DISCORD_WEBHOOK, `A admin with username ${username} have logged into Dashboard at: ${Date.now()}`)
             res.redirect('/dashboard')
         } else {
             res.status(401).json({

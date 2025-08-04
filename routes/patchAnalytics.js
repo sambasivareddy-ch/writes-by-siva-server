@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { queryPG } from "../db/db.js";
+import notifyDiscord from "../helpers/notifyDiscord.js";
 
 const router = Router();
 
@@ -28,6 +29,14 @@ router.patch('/:slug', async (req, res) => {
             })
             return;
         }
+
+        await notifyDiscord(
+            process.env.DISCORD_WEBHOOK,
+            `
+                Someone ${type === 'like'? 'liked': 'viewed'} your blog with title ${results.row[0].title} at ${Date.now()}.
+                Current likes = ${results.row[0].likes} and views = ${results.row[0].views}
+            `
+        )
 
         res.status(200).json({
             success: true,
