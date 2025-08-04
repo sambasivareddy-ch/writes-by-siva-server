@@ -1,0 +1,48 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Dashboard
+        link(rel="stylesheet", href="/css/index.css")
+    body 
+        .dashboard_wrapper 
+            .dashboard_main 
+                .dashboard_head 
+                    h2 Hi #{admin}
+                    .btns 
+                        p Total Blogs = #{length}
+                        a(href="/post").post_btn post 
+                        a(href="/logout").logout_btn logout
+                table.blog_table 
+                    thead 
+                        tr 
+                            td id
+                            td slug 
+                            td title 
+                            td description
+                            td date
+                            td primary_category
+                            td domains
+                            td filename
+                            td views
+                            td likes
+                            td created_at 
+                            td updated_at
+                            td readtime
+                    tbody 
+                        each row in blogs 
+                            tr 
+                                td(data-label="id") #{row.id}
+                                td(data-label="slug") #{row.slug}
+                                td(data-label="title") #{row.title}
+                                td(data-label="description") #{row.description}
+                                td(data-label="date") #{row.date}
+                                td(data-label="primary_category") #{row.primary_category}
+                                td(data-label="domains") #{row.domains}
+                                td(data-label="filename") #{row.filename}
+                                td(data-label="views") #{row.views}
+                                td(data-label="likes") #{row.likes}
+                                td(data-label="created_at") #{row.created_at}
+                                td(data-label="updated_at") #{row.updated_at}
+                                td(data-label="readtime") #{row.readtime}

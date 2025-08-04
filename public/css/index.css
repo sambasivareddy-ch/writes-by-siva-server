@@ -1,4 +1,5 @@
-.blog_wrapper {
+.blog_wrapper,
+.login_wrapper {
     display: grid;
     place-items: center;
     width: 100%;
@@ -9,7 +10,7 @@
     width: 600px;
 }
 
-.blog_post__form form{
+.blog_post__form form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
@@ -21,6 +22,7 @@ input {
     outline: none;
     border: solid 1px #eee;
     box-sizing: border-box;
+    margin: 5px 0;
 }
 
 button[type="submit"] {
@@ -36,4 +38,91 @@ button[type="submit"]:hover {
     background-color: #fff;
     color: #000;
     transform: scale(0.99);
+}
+
+.dashboard_wrapper {
+    padding: 1rem;
+    margin: auto;
+    box-sizing: border-box;
+}
+
+/* Table Container for Horizontal Scroll */
+.dashboard_main {
+    width: 100%;
+    overflow-x: scroll;
+}
+
+/* Table Structure */
+table.blog_table {
+    width: 100%;
+    font-size: 0.95rem;
+    table-layout: fixed;
+}
+
+/* Table Cells */
+table.blog_table td,
+table.blog_table th {
+    width: 150px;
+    min-width: 150px;
+    max-width: 150px;
+    padding: 12px 15px;
+    text-align: left;
+    white-space: nowrap; /* Keep content in a single line */
+    overflow: hidden; /* Hide anything that overflows */
+    text-overflow: ellipsis; /* Add "..." when text overflows */
+    max-width: 200px; /* You can adjust this as needed */
+    font-size: 16px;
+}
+
+/* Optional: Add tooltip for full value on hover */
+table.blog_table td {
+    position: relative;
+    cursor: help;
+}
+
+table.blog_table td:hover::after {
+    content: attr(title);
+    position: absolute;
+    left: 0;
+    bottom: -1.8rem;
+    background-color: #000;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: normal;
+    font-size: 0.8rem;
+    z-index: 10;
+}
+
+/* Row Styling */
+table.blog_table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.dashboard_head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.btns {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btns a{
+    margin: 0 10px;
+    padding: 10px;
+    border: solid 1px #242424;
+    text-decoration: none;
+    color:#000;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.btns a:hover {
+    background-color: #000;
+    color: #eee;
 }

@@ -9,13 +9,13 @@ router.post('/', async (req, res) => {
     try {
         const results = await queryPG(
             `
-                INSERT INTO blogs (id, slug, title, description, date, primary_category, domains, filename) 
+                INSERT INTO blogs (id, slug, title, description, date, primary_category, domains, filename, created_at, updated_at) 
                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
                 RETURNING *
             `, 
             [
                 id, slug, title, description, date,
-                primary, domains.toString(), filename
+                primary, domains.toString(), filename, now(), now()
             ]
         );
 
@@ -27,10 +27,7 @@ router.post('/', async (req, res) => {
             return;
         }
 
-        res.status(200).json({
-            success: true,
-            posts: results.rows,
-        })
+        res.redirect('/dashboard')
 
     } catch(err) {
         res.status(500).json({
