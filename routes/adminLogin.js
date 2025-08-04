@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
         const isEqual = await compare(password, row['password']);
         if (isEqual) {
             req.session.admin = username;
-            await notifyDiscord(process.env.DISCORD_WEBHOOK, `A admin with username ${username} have logged into Dashboard at: ${Date.now()}`)
+            await notifyDiscord(process.env.DISCORD_WEBHOOK, `A admin with username ${username} have logged into Dashboard at: ${new Date().toLocaleString()}`)
             res.redirect('/dashboard')
         } else {
             res.status(401).json({
