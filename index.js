@@ -2,6 +2,7 @@ import express from "express";
 import { config } from "dotenv";
 import cors from "cors";
 import session from "express-session";
+import compression from "compression";
 
 import { connectToPg } from "./db/db.js";
 import getAllBlogsRoute from "./routes/getPosts.js";
@@ -29,6 +30,8 @@ app.use(session({
         maxAge: 30 * 60 * 1000 // 30 minutes in milliseconds
     }
 }));
+
+app.use(compression()); // Compress the response
 
 app.use(cors({
     origin: (origin, callback) => {
