@@ -16,6 +16,7 @@ router.post('/', async (req, res) => {
                 succuess: false,
                 message: 'Unauthorized admin: ' + username
             })
+            return;
         }
 
         const row = results.rows[0]
@@ -24,7 +25,7 @@ router.post('/', async (req, res) => {
         if (isEqual) {
             req.session.admin = username;
             await notifyDiscord(process.env.DISCORD_WEBHOOK, `A admin with username ${username} have logged into Dashboard at: ${new Date().toLocaleString()}`)
-            res.redirect('/dashboard')
+            return res.redirect('/dashboard')
         } else {
             res.status(401).json({
                 success: false,
