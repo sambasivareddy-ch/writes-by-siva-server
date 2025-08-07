@@ -1,0 +1,58 @@
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Stats
+        link(rel="stylesheet", href="/css/index.css")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js")
+        style. 
+            canvas {
+                max-width: 800px;
+                margin: 30px auto;
+                display: block;
+            }
+    body 
+        include layout.pug 
+        .stats_wrapper 
+            .stats_main 
+                h2 Blog Stats 
+                canvas#statsChart
+                .most-liked 
+                    p Most Liked Blog: 
+                        a(href=`/blogbyid/${mostliked.slug}`) #{mostliked.title} (#{mostliked.likes})
+                    p Most Viewed Blog:    
+                        a(href=`/blogbyid/${mostviewed.slug}`) #{mostviewed.title} (#{mostviewed.views})
+        
+        script.
+            const labels = !{labels};
+            const views = !{views};
+            const likes = !{likes};
+
+            const ctx = document.getElementById('statsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Views',
+                            data: views,
+                            backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                        },
+                        {
+                            label: 'Likes',
+                            data: likes,
+                            backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Monthly Blog Engagement'
+                        }
+                    }
+                }
+            });
