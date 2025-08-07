@@ -5,37 +5,37 @@ html(lang="en")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         title Dashboard
         link(rel="stylesheet", href="/css/index.css")
+        link(rel="preconnect", href="https://cdnjs.cloudflare.com")
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',)
     body 
+        include layout.pug
         .dashboard_wrapper 
             .dashboard_main 
-                .dashboard_head 
-                    h2 Hi #{admin}
-                    .btns 
-                        p Total Blogs = #{length}
-                        a(href="/post").post_btn post 
-                        a(href="/logout").logout_btn logout
                 table.blog_table 
                     thead 
                         tr 
-                            td delete
-                            td id
-                            td slug 
-                            td title 
-                            td description
-                            td date
-                            td primary_category
-                            td domains
-                            td filename
-                            td views
-                            td likes
-                            td created_at 
-                            td updated_at
-                            td readtime
+                            td Actions
+                            td ID
+                            td Slug 
+                            td Title 
+                            td Description
+                            td Date
+                            td Primary Category
+                            td Domains
+                            td Filename
+                            td Views
+                            td Likes
+                            td Created At  
+                            td Updated At
+                            td Readtime
                     tbody 
                         each row in blogs 
                             tr 
-                                td 
-                                    button.del(data-id=row.id) del
+                                td.actions
+                                    button.view(data-id=row.slug) 
+                                        i.fa-solid.fa-eye
+                                    button.del(data-id=row.slug) 
+                                        i.fa-solid.fa-trash
                                 td(data-label="id") #{row.id}
                                 td(data-label="slug") #{row.slug}
                                 td(data-label="title") #{row.title}
@@ -70,6 +70,13 @@ html(lang="en")
                         alert("Error occurred");
                     }
                     }
+                });
+                });
+
+                document.querySelectorAll("button.view").forEach(function (button) {
+                button.addEventListener("click", async function () {
+                    const slug_id = button.getAttribute("data-id");
+                    window.location.href = `/blogbyid/${slug_id}`
                 });
                 });
             });

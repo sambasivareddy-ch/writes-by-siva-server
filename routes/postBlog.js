@@ -5,7 +5,9 @@ const router = Router()
 
 router.route('/')
     .get((req, res) => {
-        res.render('form')
+        res.render('form', {
+            admin: req.session.admin,
+        })
     })
     .post(async (req, res) => {
         const { id, slug, title, description, date, primary, domains, filename } = req.body;

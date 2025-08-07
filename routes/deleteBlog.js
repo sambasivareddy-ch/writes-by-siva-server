@@ -7,7 +7,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const results = await queryPG('DELETE FROM blog_posts WHERE id = $1', [id]);
+        const results = await queryPG('DELETE FROM blogs WHERE id = $1', [id]);
 
         if (results.rowCount === 0) {
             res.status(201).json({

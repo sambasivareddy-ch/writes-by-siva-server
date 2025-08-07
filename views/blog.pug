@@ -1,0 +1,54 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title Blog
+        link(rel="stylesheet", href="/css/index.css")
+        link(rel="preconnect", href="https://cdnjs.cloudflare.com")
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',)
+    body 
+        include layout.pug
+        .blog-post_wrapper 
+            .blog-post_main 
+                .blog-content 
+                    h1 #{post.title}
+                    button.edit-btn Edit
+                    .blog-info 
+                        p
+                            b Id: 
+                            span #{post.id}
+                        p  
+                            b Slug 
+                            span #{post.slug}
+                        p  
+                            b Description 
+                            span #{post.description}
+                        p  
+                            b Date: 
+                            span #{post.date}
+                        p 
+                            b Primary Category: 
+                            span #{post.primary_category}
+                        p 
+                            b Domains: 
+                            span #{post.domains}
+                        p 
+                            b File: 
+                            span #{post.filename} 
+                        p 
+                            b Views: 
+                            span #{post.views} 
+                        p 
+                            b Likes: 
+                            span #{post.likes} 
+                        p 
+                            b Created At: 
+                            span #{post.created_at}  
+                        p 
+                            b Updated At: 
+                            span #{post.updated_at}  
+                        p 
+                            b Read Time: 
+                            span #{post.readtime}
+

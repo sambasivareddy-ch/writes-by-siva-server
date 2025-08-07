@@ -30,7 +30,9 @@ router.post('/', async (req, res) => {
 
         await notifyDiscord(process.env.DISCORD_WEBHOOK, `New Blog has been posted at ${new Date().toLocaleString()}} with Title: ${title}`)
 
-        res.redirect('/dashboard')
+        res.redirect('/dashboard', {
+            admin: req.session.admin,
+        })
 
     } catch(err) {
         res.status(500).json({

@@ -17,6 +17,7 @@ import adminLoginRoute from "./routes/adminLogin.js";
 import dashboardRoute from "./routes/dashboard.js";
 import authCheck from "./middleware/authCheck.js";
 import deleteBlogRoute from "./routes/deleteBlog.js";
+import adminGetPostBySlugRoute from "./routes/adminGetBySlug.js";
 
 const app = express();
 
@@ -86,6 +87,7 @@ app.use("/readtime", updateReadtimeRoute);
 app.use("/login", adminLoginRoute);
 app.use("/dashboard", authCheck, dashboardRoute);
 app.use('/delete', authCheck, deleteBlogRoute);
+app.use('/blogbyid', authCheck, adminGetPostBySlugRoute);
 app.use("/logout", authCheck, (req, res) => {
     (req.session.admin = null), res.redirect("/");
 });
