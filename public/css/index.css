@@ -11,7 +11,8 @@ header {
     box-sizing: border-box;
     align-items: center;
     font-family: sans-serif;
-    background-color: #eee;
+    background-color: #263238;
+    color: #fff;
 }
 
 nav {
@@ -21,7 +22,7 @@ nav {
 }
 
 nav a {
-    color: #000;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -36,6 +37,8 @@ nav a:hover {
     place-items: center;
     width: 100%;
     height: 100vh;
+    background-color: #292929;
+    color: #fff;
 }
 
 .blog_post__form {
@@ -56,6 +59,9 @@ input {
     border: solid 1px #eee;
     box-sizing: border-box;
     margin: 5px 0;
+    background-color: #212121;
+    color: #fff;
+    border-radius: 2px;
 }
 
 button[type="submit"] {
@@ -65,6 +71,7 @@ button[type="submit"] {
     background-color: #252525;
     color: #fff;
     cursor: pointer;
+    border: solid 1px #fff;
 }
 
 button[type="submit"]:hover {
@@ -77,6 +84,7 @@ button[type="submit"]:hover {
     padding: 1rem;
     margin: auto;
     box-sizing: border-box;
+    background-color: #212121;
 }
 
 /* Table Container for Horizontal Scroll */
@@ -90,6 +98,7 @@ table.blog_table {
     width: 100%;
     font-size: 0.95rem;
     table-layout: fixed;
+    border-collapse: collapse;
 }
 
 /* Table Cells */
@@ -105,6 +114,8 @@ table.blog_table th {
     text-overflow: ellipsis; /* Add "..." when text overflows */
     max-width: 200px; /* You can adjust this as needed */
     font-size: 16px;
+    color: #fff;
+    border: solid 1px #616161;
 }
 
 /* Optional: Add tooltip for full value on hover */
@@ -129,7 +140,7 @@ table.blog_table td:hover::after {
 
 /* Row Styling */
 table.blog_table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #303030;
 }
 
 .dashboard_head {
@@ -176,11 +187,12 @@ thead {
 
 .actions button {
     outline: none;
-    border: solid 1px #000;
+    border: none;
     background: none;
     padding: 5px;
     border-radius: 5px;
     cursor: pointer;
+    color: #fff;
 }
 
 .actions button:hover {
@@ -191,12 +203,19 @@ thead {
 .blog-post_wrapper {
     width: 100%;
     height: 100vh;
-    margin: 20px;
+    /* margin: 20px; */
+    background-color: #212121;
 }
 
 /* .blog-content {
     background-color: #eee;
 } */
+
+.blog-post_main {
+    padding: 20px;
+    box-sizing: border-box;
+    color: #fff;
+}
 
 .blog-info {
     display: flex;
@@ -226,6 +245,8 @@ thead {
     height: 100vh;
     display: grid;
     place-items: center;
+    background-color: #212121;
+    color: #fff;
 }
 
 .stats_main {

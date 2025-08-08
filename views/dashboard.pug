@@ -36,6 +36,8 @@ html(lang="en")
                                         i.fa-solid.fa-eye
                                     button.del(data-id=row.slug) 
                                         i.fa-solid.fa-trash
+                                    button.reset(data-id=row.slug)
+                                        i.fa-solid.fa-clock-rotate-left
                                 td(data-label="id") #{row.id}
                                 td(data-label="slug") #{row.slug}
                                 td(data-label="title") #{row.title}
@@ -66,7 +68,6 @@ html(lang="en")
                             alert("Failed to delete the blog");
                         }
                     } catch (err) {
-                        console.error(err);
                         alert("Error occurred");
                     }
                     }
@@ -77,6 +78,24 @@ html(lang="en")
                 button.addEventListener("click", async function () {
                     const slug_id = button.getAttribute("data-id");
                     window.location.href = `/blogbyid/${slug_id}`
+                });
+                });
+
+                document.querySelectorAll("button.reset").forEach(function (button) {
+                button.addEventListener("click", async function () {
+                    const slug_id = button.getAttribute("data-id");
+                    if (confirm("Are you sure you want to reset the likes of this blog?")) {
+                    try {
+                        const response = await fetch(`/resetlike/${slug_id}`, {
+                            method: "PATCH",
+                        });
+                        if (response.ok) {
+                            alert(`Resetted the likes of ${slug_id}`);
+                        }
+                    } catch (err) {
+                        alert("Error occurred");
+                    }
+                    }
                 });
                 });
             });
