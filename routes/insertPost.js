@@ -11,12 +11,12 @@ router.post('/', async (req, res) => {
         const results = await queryPG(
             `
                 INSERT INTO blogs (id, slug, title, description, date, primary_category, domains, filename, created_at, updated_at) 
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
                 RETURNING *
             `, 
             [
                 id, slug, title, description, date,
-                primary, domains.toString(), filename, now(), now()
+                primary, domains.toString(), filename, now(), now(), req.session.author
             ]
         );
 

@@ -28,6 +28,7 @@ html(lang="en")
                             td Created At  
                             td Updated At
                             td Readtime
+                            td Author
                     tbody 
                         each row in blogs 
                             tr 
@@ -51,6 +52,7 @@ html(lang="en")
                                 td(data-label="created_at") #{row.created_at}
                                 td(data-label="updated_at") #{row.updated_at}
                                 td(data-label="readtime") #{row.readtime}
+                                td(data-label="author") #{row.author}
         
         script.
             document.addEventListener("DOMContentLoaded", function () {
