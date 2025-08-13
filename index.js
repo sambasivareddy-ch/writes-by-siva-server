@@ -20,6 +20,7 @@ import deleteBlogRoute from "./routes/deleteBlog.js";
 import adminGetPostBySlugRoute from "./routes/adminGetBySlug.js";
 import statsRoute from "./routes/getStats.js";
 import resetLikesRoute from "./routes/resetLikesBySlug.js";
+import subscribeRoute from "./routes/subscribeNewsletter.js";
 
 const app = express();
 
@@ -67,7 +68,7 @@ app.use(
                 callback(new Error("Not allowed by CORS"), false);
             }
         },
-        methods: "GET,POST,PUT,DELETE,PATCH",
+        methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS",
         credentials: true,
     })
 );
@@ -92,6 +93,7 @@ app.use('/delete', authCheck, deleteBlogRoute);
 app.use('/blogbyid', authCheck, adminGetPostBySlugRoute);
 app.use('/stats', authCheck, statsRoute);
 app.use('/resetlike', authCheck, resetLikesRoute);
+app.use('/subscribe', subscribeRoute);
 app.use("/logout", authCheck, (req, res) => {
     (req.session.admin = null), res.redirect("/");
 });
