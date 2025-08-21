@@ -14,7 +14,9 @@ html(lang="en")
                 table.blog_table 
                     thead 
                         tr 
-                            td Actions
+                            td Show 
+                            td Delete 
+                            td Reset 
                             td ID
                             td Slug 
                             td Title 
@@ -29,14 +31,17 @@ html(lang="en")
                             td Updated At
                             td Readtime
                             td Author
+                            td Visibility
                     tbody 
                         each row in blogs 
                             tr 
-                                td.actions
+                                td 
                                     button.view(data-id=row.slug) 
                                         i.fa-solid.fa-eye
+                                td 
                                     button.del(data-id=row.slug) 
                                         i.fa-solid.fa-trash
+                                td 
                                     button.reset(data-id=row.slug)
                                         i.fa-solid.fa-clock-rotate-left
                                 td(data-label="id") #{row.id}
@@ -53,6 +58,7 @@ html(lang="en")
                                 td(data-label="updated_at") #{row.updated_at}
                                 td(data-label="readtime") #{row.readtime}
                                 td(data-label="author") #{row.author}
+                                td(data-lable="visible") #{row.visible}
         
         script.
             document.addEventListener("DOMContentLoaded", function () {
