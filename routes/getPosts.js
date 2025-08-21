@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const results = await queryPG('SELECT * FROM blogs ORDER BY date DESC');
+        const results = await queryPG('SELECT * FROM blogs WHERE visible = true ORDER BY date DESC');
 
         if (results.rowCount === 0) {
             res.status(201).json({
