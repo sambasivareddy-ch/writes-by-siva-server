@@ -253,6 +253,11 @@ button:hover {
     width: 600px;
 }
 
+input:read-only {
+    background-color: #616161;
+    cursor: not-allowed;
+}
+
 @media screen and (max-width: 600px){
     table.blog_table td,
     table.blog_table th {

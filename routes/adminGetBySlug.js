@@ -17,7 +17,7 @@ router.get('/:slug', async (req, res) => {
             return;
         }
 
-        return res.render('blog', {
+        return res.render('edit-form', {
             admin: req.session.admin,
             post: results.rows[0],
         })

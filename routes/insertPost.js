@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
             `, 
             [
                 id, slug, title, description, date,
-                primary, domains.toString(), filename, now(), now(), req.session.author
+                primary, domains.toString(), filename, Date.now(), Date.now(), req.session.author
             ]
         );
 

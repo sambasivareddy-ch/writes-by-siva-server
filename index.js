@@ -21,6 +21,7 @@ import adminGetPostBySlugRoute from "./routes/adminGetBySlug.js";
 import statsRoute from "./routes/getStats.js";
 import resetLikesRoute from "./routes/resetLikesBySlug.js";
 import subscribeRoute from "./routes/subscribeNewsletter.js";
+import editBlogRoute from "./routes/editBlog.js";
 
 const app = express();
 
@@ -93,6 +94,7 @@ app.use('/delete', authCheck, deleteBlogRoute);
 app.use('/blogbyid', authCheck, adminGetPostBySlugRoute);
 app.use('/stats', authCheck, statsRoute);
 app.use('/resetlike', authCheck, resetLikesRoute);
+app.use('/edit', authCheck, editBlogRoute);
 app.use('/subscribe', subscribeRoute);
 app.use("/logout", authCheck, (req, res) => {
     (req.session.admin = null), res.redirect("/");
