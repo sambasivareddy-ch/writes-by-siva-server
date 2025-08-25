@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/sambasivareddy-ch/writes-by-siva-server#readme",
   "dependencies": {
+    "@google/genai": "^1.15.0",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
     "compression": "^1.8.1",

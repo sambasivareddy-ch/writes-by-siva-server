@@ -22,6 +22,7 @@ import statsRoute from "./routes/getStats.js";
 import resetLikesRoute from "./routes/resetLikesBySlug.js";
 import subscribeRoute from "./routes/subscribeNewsletter.js";
 import editBlogRoute from "./routes/editBlog.js";
+import summarizeBlogRoute from "./routes/getAISummary.js";
 
 const app = express();
 
@@ -96,6 +97,7 @@ app.use('/stats', authCheck, statsRoute);
 app.use('/resetlike', authCheck, resetLikesRoute);
 app.use('/edit', authCheck, editBlogRoute);
 app.use('/subscribe', subscribeRoute);
+app.use('/summarize', summarizeBlogRoute);
 app.use("/logout", authCheck, (req, res) => {
     (req.session.admin = null), res.redirect("/");
 });
