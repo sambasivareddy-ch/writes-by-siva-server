@@ -30,13 +30,13 @@ router.patch('/:slug', async (req, res) => {
             return;
         }
 
-        await notifyDiscord(
-            process.env.DISCORD_WEBHOOK,
-            `
-                Someone ${type === 'like'? 'liked': 'viewed'} your blog with title ${results.row[0].title} at ${new Date().toLocaleString()}.
-                Current likes = ${results.row[0].likes} and views = ${results.row[0].views}
-            `
-        )
+        // await notifyDiscord(
+        //     process.env.DISCORD_WEBHOOK,
+        //     `
+        //         Someone ${type === 'like'? 'liked': 'viewed'} your blog with title ${results.row[0].title} at ${new Date().toLocaleString()}.
+        //         Current likes = ${results.row[0].likes} and views = ${results.row[0].views}
+        //     `
+        // )
 
         res.status(200).json({
             success: true,
