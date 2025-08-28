@@ -37,19 +37,26 @@ router.route('/')
 
             await notifyDiscord(process.env.DISCORD_WEBHOOK, `New Blog has been posted at ${new Date().toLocaleString()}} with Title: ${title}`)
 
-            const subscribers = await queryPG(`SELECT * FROM newsletter`);
+            res.redirect('/post');
 
-            const sendResults = await Promise.allSettled(
-                subscribers.rows.map(user => sendNewletterToTheSubscriber(results.rows[0], user.email))
-            )
+            // Fire-and-forget newsletter sending
+            (async () => {
+                try {
+                    const subscribers = await queryPG(`SELECT * FROM newsletter`);
+                    const sendResults = await Promise.allSettled(
+                        subscribers.rows.map(user => sendNewletterToTheSubscriber(results.rows[0], user.email))
+                    );
 
-            sendResults.forEach((result, idx) => {
-                if (result.status === 'rejected') {
-                    console.error(`Failed to send to ${subscribers.rows[idx].email}`, result.reason);
+                    sendResults.forEach((result, idx) => {
+                        if (result.status === 'rejected') {
+                            console.error(`Failed to send to ${subscribers.rows[idx].email}`, result.reason);
+                        }
+                    });
+                } catch (err) {
+                    console.error("Newsletter sending failed", err);
                 }
-            })
+            })();
 
-            res.redirect('/post')
 
         } catch(err) {
             res.status(500).json({
