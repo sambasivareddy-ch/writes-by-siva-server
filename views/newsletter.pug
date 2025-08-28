@@ -1,0 +1,145 @@
+doctype html
+html(lang="en")
+  - var brandName = typeof brandName !== 'undefined' ? brandName : 'BySiva'
+  - var primaryColor = typeof primaryColor !== 'undefined' ? primaryColor : '#0ea5e9' /* cyan-500 */
+  - var accentColor = typeof accentColor !== 'undefined' ? accentColor : '#111827' /* gray-900 */
+  - var logoUrl = typeof logoUrl !== 'undefined' ? logoUrl : null
+  - var homepageUrl = typeof homepageUrl !== 'undefined' ? homepageUrl : 'https://www.bysiva.blog/'
+  - var previewText = typeof previewText !== 'undefined' ? previewText : `A new post just dropped on ${brandName}`
+  - var posts = Array.isArray(locals.posts) ? posts : []
+  - var unsubscribeUrl = typeof unsubscribeUrl !== 'undefined' ? unsubscribeUrl : 'https://writes-by-siva-server-production.up.railway.app/unsubscribe?email=' + userEmail
+  - var managePrefsUrl = typeof managePrefsUrl !== 'undefined' ? managePrefsUrl : null
+  - var contactEmail = typeof contactEmail !== 'undefined' ? contactEmail : 'sambasivareddychinta@gmaul.com'
+  - var addressLines = Array.isArray(locals.addressLines) ? addressLines : ['Vijayawada', 'India']
+  - var social = typeof social !== 'undefined' ? social : {}
+
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="x-ua-compatible" content="ie=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    title #{brandName} • New Blog
+    // Preheader text (hidden in body for better client support)
+    style.
+      /* Basic resets + mobile tweaks; keep minimal for client compatibility */
+      body, table, td, a { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+      img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; display: block; }
+      table { border-collapse: collapse !important; }
+      a { text-decoration: none; }
+      /* Container width on small screens */
+      @media screen and (max-width: 620px) {
+        .container { width: 100% !important; }
+        .px { padding-left: 16px !important; padding-right: 16px !important; }
+        .stack { display: block !important; width: 100% !important; }
+        .center { text-align: center !important; }
+        .btn { width: 100% !important; }
+      }
+    // Dark-mode friendly color hints (supported by some clients)
+    meta(name="color-scheme" content="light dark")
+    meta(name="supported-color-schemes" content="light dark")
+  body(style=`margin:0; padding:0; background-color:#f3f4f6;`)
+    // Hidden preview text
+    span(style="display:none; font-size:0; line-height:0; max-height:0; max-width:0; opacity:0; overflow:hidden;") #{previewText}
+
+    // Wrapper
+    table(role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%")
+      tr
+        td(align="center" style="background-color:#f3f4f6;")
+          // Container
+          table.container(role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="width:600px; max-width:600px; margin:0 auto;")
+            // Header
+            tr
+              td(class="px" style="padding:24px; background:#ffffff; border-bottom:1px solid #e5e7eb;")
+                table(role="presentation" width="100%")
+                  tr
+                    td(class="stack" align="right" style="vertical-align:middle;")
+                      a(href=homepageUrl style=`color:${accentColor}; font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:14px;`) #{brandName}
+
+            // Hero / Title
+            tr
+              td(class="px" style="padding:28px; background:#ffffff;")
+                table(role="presentation" width="100%")
+                  tr
+                    td
+                      h1(style=`margin:0 0 8px 0; font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:24px; line-height:1.25; color:${accentColor};`)
+                        if posts.length <= 1
+                          | New on the Blog
+                        else
+                          | Latest from the Blog
+                      p(style="margin:0; font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:16px; line-height:1.6; color:#374151;")
+                        if posts.length <= 1
+                          | We just published something fresh. Give it a read!
+                        else
+                          | Here are the newest posts we think you’ll like.
+
+            // Posts loop
+            each post in posts
+              - var title = post.title || 'Untitled Post'
+              - var url = post.url || '#'
+              - var excerpt = post.excerpt || ''
+              - var imageUrl = post.imageUrl || null
+              - var author = post.author || null
+              - var date = post.date || null
+              tr
+                td(class="px" style="padding:0 28px 0 28px; background:#ffffff;")
+                  table(role="presentation" width="100%" style="border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; margin-bottom:20px;")
+                    if imageUrl
+                      tr
+                        td
+                          a(href=url)
+                            img(src=imageUrl alt=title width="600" style="width:100%; height:auto; display:block;")
+                    tr
+                      td(style="padding:18px;")
+                        h2(style=`margin:0 0 8px 0; font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:18px; line-height:1.4; color:${accentColor};`)
+                          a(href=url style=`color:${accentColor};`) #{title}
+                        if author || date
+                          p(style="margin:0 0 10px 0; font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:12px; color:#6b7280;")
+                            if author
+                              | By #{author}
+                              if date
+                                |  • 
+                            if date
+                              | #{date}
+                        if excerpt
+                          p(style="margin:0 0 16px 0; font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:14px; line-height:1.7; color:#374151;") #{excerpt}
+                        // Button
+                        table(role="presentation" cellpadding="0" cellspacing="0" border="0")
+                          tr
+                            td(align="left")
+                              a.btn(href=url style=`background:${primaryColor}; border-radius:8px; padding:10px 16px; font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:14px; color:#ffffff; display:inline-block;`) Read the post →
+
+            // Secondary CTA (optional)
+            tr
+              td(class="px" style="padding:8px 28px 28px 28px; background:#ffffff;")
+                table(role="presentation" width="100%")
+                  tr
+                    td(align="center")
+                      a(href=homepageUrl style=`font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:14px; color:${primaryColor};`) Browse all posts →
+
+            // Footer
+            tr
+              td(style="padding:24px;")
+                table(role="presentation" width="100%" style="width:100%;")
+                  tr
+                    td(align="center" style="font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; font-size:12px; color:#6b7280;")
+                      if social && (social.twitter || social.linkedin || social.github || social.facebook || social.instagram)
+                        p(style="margin:0 0 10px 0;")
+                          if social.linkedin
+                            a(href=social.linkedin style="margin:0 6px; color:#6b7280;") LinkedIn
+                          if social.github
+                            a(href=social.github style="margin:0 6px; color:#6b7280;") GitHub
+                          if social.instagram
+                            a(href=social.instagram style="margin:0 6px; color:#6b7280;") Instagram
+                      p(style="margin:0;")
+                        | You’re receiving this because you subscribed to updates from #{brandName}.
+                      p(style="margin:8px 0 0 0;")
+                        a(href=unsubscribeUrl style="color:#6b7280;") Unsubscribe
+                        if managePrefsUrl
+                          |  · 
+                          a(href=managePrefsUrl style="color:#6b7280;") Manage preferences
+                      p(style="margin:8px 0 0 0;")
+                        | Contact: 
+                        a(href=`mailto:${contactEmail}` style="color:#6b7280;") #{contactEmail}
+                      if addressLines && addressLines.length
+                        p(style="margin:8px 0 0 0; white-space:pre-line;") #{addressLines.join('\n')}
+                      p(style="margin:16px 0 0 0; color:#9ca3af;")
+                        | © #{new Date().getFullYear()} #{brandName}. All rights reserved.

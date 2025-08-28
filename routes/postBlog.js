@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { queryPG } from "../db/db.js";
+import sendNewletterToTheSubscriber from "../helpers/sendNewsletter.js";
+import notifyDiscord from "../helpers/notifyDiscord.js";
 
 const router = Router()
 
@@ -10,18 +12,18 @@ router.route('/')
         })
     })
     .post(async (req, res) => {
-        const { id, slug, title, description, date, primary, domains, filename } = req.body;
+        const { id, slug, title, description, date, primary, domains, filename, author, visible } = req.body;
 
         try {
             const results = await queryPG(
                 `
-                    INSERT INTO blogs (id, slug, title, description, date, primary_category, domains, filename) 
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                    INSERT INTO blogs (id, slug, title, description, date, primary_category, domains, filename, created_at, updated_at, author, visible) 
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
                     RETURNING *
                 `, 
                 [
                     id, slug, title, description, date,
-                    primary, domains, filename
+                    primary, domains, filename, new Date(), new Date(), author, visible
                 ]
             );
 
@@ -32,6 +34,20 @@ router.route('/')
                 })
                 return;
             }
+
+            await notifyDiscord(process.env.DISCORD_WEBHOOK, `New Blog has been posted at ${new Date().toLocaleString()}} with Title: ${title}`)
+
+            const subscribers = await queryPG(`SELECT * FROM newsletter`);
+
+            const sendResults = await Promise.allSettled(
+                subscribers.rows.map(user => sendNewletterToTheSubscriber(results.rows[0], user.email))
+            )
+
+            sendResults.forEach((result, idx) => {
+                if (result.status === 'rejected') {
+                    console.error(`Failed to send to ${subscribers.rows[idx].email}`, result.reason);
+                }
+            })
 
             res.redirect('/post')
 
