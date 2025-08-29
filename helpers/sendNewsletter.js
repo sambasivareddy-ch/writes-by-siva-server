@@ -51,8 +51,10 @@ const sendNewletterToTheSubscriber = async (post, userEmail) => {
             subject: `New Blog: ${post.title}`,
             html
         })
+        console.log('Sent mail');
         return true;
     } catch(err) {
+        console.log(err)
         return false;
     }
 }
