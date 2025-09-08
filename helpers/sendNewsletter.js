@@ -2,19 +2,22 @@ import nodemailer from 'nodemailer';
 import pug from 'pug';
 import fs from 'node:fs';
 import path from 'node:path';
+import { Resend } from 'resend';
 
 const templatePath = path.join(process.cwd(), '/views', 'newsletter.pug');
 const compileNewsletter = pug.compile(fs.readFileSync(templatePath, 'utf8'), { filename: templatePath });
 
-const transporter = nodemailer.createTransport({
-    host: process.env.SMPT_HOST,
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.SMPT_USER,
-        pass: process.env.SMPT_PASSWORD
-    }
-})
+// const transporter = nodemailer.createTransport({
+//     host: process.env.SMPT_HOST,
+//     port: 587,
+//     secure: false,
+//     auth: {
+//         user: process.env.SMPT_USER,
+//         pass: process.env.SMPT_PASSWORD
+//     }
+// })
+
+const resend = new Resend(process.env.RESEND_API);
 
 const sendNewletterToTheSubscriber = async (post, userEmail) => {
     const html = compileNewsletter({
@@ -45,13 +48,12 @@ const sendNewletterToTheSubscriber = async (post, userEmail) => {
     });
     
     try {
-        await transporter.sendMail({
-            from: '"Samba Siva" <bysiva.blog@gmail.com>',
+        await resend.emails.send({
+            from: '"Samba Siva" <news@bysiva.blog>',
             to: userEmail,
             subject: `New Blog: ${post.title}`,
             html
         })
-        console.log('Sent mail');
         return true;
     } catch(err) {
         console.log(err)
