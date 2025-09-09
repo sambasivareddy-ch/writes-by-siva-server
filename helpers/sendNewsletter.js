@@ -30,7 +30,7 @@ const sendNewletterToTheSubscriber = async (post, userEmail) => {
         posts: [
         {
             title: post.title,
-            url: `https://www.bysiva.blog/${post.slug}`,
+            url: `https://www.bysiva.blog/blog/${post.slug}`,
             excerpt: post.description,
             author: 'Siva',
             date: post.date
