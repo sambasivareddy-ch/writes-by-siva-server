@@ -19,3 +19,6 @@ Content-Type: application/json
     "domains":["competitive-programming","array","dynamic-programming"],
     "filename":"competitive-programming/graph-bfs.md"
 }
+
+###
+DELETE http://localhost:5000/unsubscribe?email=sambachinta.24@gmail.com
