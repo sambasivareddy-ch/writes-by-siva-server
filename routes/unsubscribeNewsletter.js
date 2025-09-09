@@ -4,7 +4,7 @@ import { queryPG } from "../db/db.js";
 
 const router = Router();
 
-router.delete('/', async (req, res) => {
+router.get('/', async (req, res) => {
     const { email } = req.query;
 
     if (!email.trim()) {
