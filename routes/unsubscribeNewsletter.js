@@ -1,11 +1,14 @@
 import { Router } from "express";
 
 import { queryPG } from "../db/db.js";
+import { hashEmail } from "../helpers/cryptEmail.js";
 
 const router = Router();
 
 router.get('/', async (req, res) => {
     const { email } = req.query;
+
+    const emailHash = hashEmail(email);
 
     if (!email.trim()) {
         res.status(402).json({
@@ -15,7 +18,7 @@ router.get('/', async (req, res) => {
     }
 
     try {
-        const results = await queryPG('DELETE FROM newsletter WHERE email = $1', [email]);
+        const results = await queryPG('DELETE FROM subscribers WHERE email_hash = $1', [emailHash]);
 
         if (results.rowCount === 0) {
             res.status(201).json({

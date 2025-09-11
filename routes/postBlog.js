@@ -2,6 +2,7 @@ import { Router } from "express";
 import { queryPG } from "../db/db.js";
 import sendNewletterToTheSubscriber from "../helpers/sendNewsletter.js";
 import notifyDiscord from "../helpers/notifyDiscord.js";
+import { decryptEmail } from "../helpers/cryptEmail.js";
 
 const router = Router()
 
@@ -42,9 +43,17 @@ router.route('/')
             // Fire-and-forget newsletter sending
             (async () => {
                 try {
-                    const subscribers = await queryPG(`SELECT * FROM newsletter`);
+                    const subscribers = await queryPG(`SELECT * FROM subscribers`);
                     const sendResults = await Promise.allSettled(
-                        subscribers.rows.map(user => sendNewletterToTheSubscriber(results.rows[0], user.email))
+                        subscribers.rows.map(user => {
+                            const decryptedEmail = decryptEmail({
+                                encrypted: user.email_encrypted,
+                                iv: user.email_iv,
+                                tag: user.email_tag,
+                            });
+
+                            sendNewletterToTheSubscriber(results.rows[0], decryptedEmail)
+                        })
                     );
 
                     sendResults.forEach((result, idx) => {
