@@ -41,30 +41,33 @@ router.route('/')
             res.redirect('/post');
 
             // Fire-and-forget newsletter sending
-            (async () => {
-                try {
-                    const subscribers = await queryPG(`SELECT * FROM subscribers`);
-                    const sendResults = await Promise.allSettled(
-                        subscribers.rows.map(user => {
-                            const decryptedEmail = decryptEmail({
-                                encrypted: user.email_encrypted,
-                                iv: user.email_iv,
-                                tag: user.email_tag,
-                            });
-
-                            sendNewletterToTheSubscriber(results.rows[0], decryptedEmail)
-                        })
-                    );
-
-                    sendResults.forEach((result, idx) => {
-                        if (result.status === 'rejected') {
-                            console.error(`Failed to send to ${subscribers.rows[idx].email}`, result.reason);
-                        }
-                    });
-                } catch (err) {
-                    console.error("Newsletter sending failed", err);
-                }
-            })();
+            // For now sending newsletter when the blogs are not personal
+            if (!domains.contains('personal')) {
+                (async () => {
+                    try {
+                        const subscribers = await queryPG(`SELECT * FROM subscribers`);
+                        const sendResults = await Promise.allSettled(
+                            subscribers.rows.map(user => {
+                                const decryptedEmail = decryptEmail({
+                                    encrypted: user.email_encrypted,
+                                    iv: user.email_iv,
+                                    tag: user.email_tag,
+                                });
+    
+                                sendNewletterToTheSubscriber(results.rows[0], decryptedEmail)
+                            })
+                        );
+    
+                        sendResults.forEach((result, idx) => {
+                            if (result.status === 'rejected') {
+                                console.error(`Failed to send to ${subscribers.rows[idx].email}`, result.reason);
+                            }
+                        });
+                    } catch (err) {
+                        console.error("Newsletter sending failed", err);
+                    }
+                })();
+            }
 
 
         } catch(err) {
