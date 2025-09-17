@@ -53,7 +53,7 @@ router.route('/')
                                     iv: user.email_iv,
                                     tag: user.email_tag,
                                 });
-                                console.log(`Sending mail to: ${decryptEmail}`)
+                                console.log(`Sending mail to: ${decryptedEmail}`)
                                 sendNewletterToTheSubscriber(results.rows[0], decryptedEmail)
                             })
                         );
