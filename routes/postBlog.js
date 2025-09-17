@@ -42,7 +42,7 @@ router.route('/')
 
             // Fire-and-forget newsletter sending
             // For now sending newsletter when the blogs are not personal
-            if (!domains.contains('personal')) {
+            // if (!domains.contains('personal')) {
                 (async () => {
                     try {
                         const subscribers = await queryPG(`SELECT * FROM subscribers`);
@@ -67,7 +67,7 @@ router.route('/')
                         console.error("Newsletter sending failed", err);
                     }
                 })();
-            }
+            // }
 
 
         } catch(err) {
