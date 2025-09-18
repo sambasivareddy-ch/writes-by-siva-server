@@ -1,7 +1,7 @@
 import pug from 'pug';
 import fs from 'node:fs';
 import path from 'node:path';
-import resend from '../lib/resend';
+import resend from '../lib/resend.js';
 
 const templatePath = path.join(process.cwd(), '/views', 'unsubscribed.pug');
 const compileNewsletter = pug.compile(fs.readFileSync(templatePath, 'utf8'), { filename: templatePath });
