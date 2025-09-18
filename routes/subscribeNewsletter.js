@@ -2,6 +2,8 @@ import { Router } from "express";
 import { queryPG } from "../db/db.js";
 import { encryptEmail, hashEmail } from "../helpers/cryptEmail.js";
 
+import sendSubscribedMail from "../helpers/sendSubscribedSuccessfully.js";
+
 const router = Router();
 
 router.post("/", async (req, res) => {
@@ -36,7 +38,13 @@ router.post("/", async (req, res) => {
         );
 
         if (insertRows.rowCount === 1) {
-            res.status(200).json({
+            try {
+                await sendSubscribedMail(insertRows.rows[0], email);
+            } catch (mailErr) {
+                console.error(`❌ Failed to send subscribed email to ${email}`, mailErr);
+            }
+
+            return res.status(200).json({
                 success: true,
                 message: "Successfully Subscribed",
             });

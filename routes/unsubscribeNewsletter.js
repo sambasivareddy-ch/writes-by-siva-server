@@ -2,6 +2,7 @@ import { Router } from "express";
 
 import { queryPG } from "../db/db.js";
 import { hashEmail } from "../helpers/cryptEmail.js";
+import sendUnSubscribedMail from "../helpers/sendUnsubscribedMail.js";
 
 const router = Router();
 
@@ -29,6 +30,12 @@ router.get('/', async (req, res) => {
         }
 
         if (results.rowCount === 1) {
+            try {
+                await sendUnSubscribedMail(insertRows.rows[0], email);
+            } catch (mailErr) {
+                console.error(`❌ Failed to un-subscribe email ${email}`, mailErr);
+            }
+
             res.status(200).json({
                 success: true,
                 message: 'Successfully Unsubscribed'

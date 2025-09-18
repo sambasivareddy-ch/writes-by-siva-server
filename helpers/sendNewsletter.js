@@ -45,7 +45,6 @@ const sendNewletterToTheSubscriber = async (post, userEmail) => {
         })
         return true;
     } catch(err) {
-        console.log(err)
         return false;
     }
 }

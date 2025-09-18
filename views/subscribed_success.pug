@@ -1,0 +1,37 @@
+doctype html
+html(lang="en")
+  - var brandName = typeof brandName !== 'undefined' ? brandName : 'BySiva'
+  - var primaryColor = typeof primaryColor !== 'undefined' ? primaryColor : '#0ea5e9' /* cyan-500 */
+  - var accentColor = typeof accentColor !== 'undefined' ? accentColor : '#111827' /* gray-900 */
+  - var homepageUrl = typeof homepageUrl !== 'undefined' ? homepageUrl : 'https://www.bysiva.blog/'
+
+  head
+    meta(charset="utf-8")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    title Subscription Successful • #{brandName}
+    style.
+      body { margin:0; padding:0; background:#f3f4f6; font-family:Arial,Segoe UI,Roboto,Helvetica,sans-serif; }
+      .container { max-width:600px; margin:40px auto; background:#ffffff; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05); overflow:hidden; }
+      .header { padding:24px; border-bottom:1px solid #e5e7eb; text-align:center; color:#{accentColor}; font-size:20px; font-weight:bold; }
+      .content { padding:28px; text-align:center; }
+      .content h1 { margin:0 0 16px 0; font-size:24px; color:#{accentColor}; }
+      .content p { margin:0 0 16px 0; font-size:16px; color:#374151; line-height:1.6; }
+      .btn { display:inline-block; background:#{primaryColor}; color:#fff; padding:12px 20px; border-radius:8px; text-decoration:none; font-size:14px; }
+      .footer { padding:20px; text-align:center; font-size:12px; color:#6b7280; border-top:1px solid #e5e7eb; }
+      .footer a { color:#{primaryColor}; text-decoration:none; }
+
+  body
+    .container
+      .header #{brandName}
+
+      .content
+        h1 🎉 Subscription Successful!
+        p Thanks for subscribing to <strong>#{brandName}</strong>.  
+        p You’ll now receive updates whenever we publish new blogs.
+        a.btn(href=homepageUrl) Go to Homepage →
+
+      .footer
+        p You’re subscribed to updates from #{brandName}.
+        p
+          | Want to explore more?  
+          a(href=homepageUrl) Visit #{brandName}
