@@ -1,12 +1,10 @@
 import pug from 'pug';
 import fs from 'node:fs';
 import path from 'node:path';
-import { Resend } from 'resend';
+import resend from '../lib/resend';
 
 const templatePath = path.join(process.cwd(), '/views', 'newsletter.pug');
 const compileNewsletter = pug.compile(fs.readFileSync(templatePath, 'utf8'), { filename: templatePath });
-
-const resend = new Resend(process.env.RESEND_API);
 
 const sendNewletterToTheSubscriber = async (post, userEmail) => {
     const html = compileNewsletter({

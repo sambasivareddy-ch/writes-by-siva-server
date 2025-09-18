@@ -31,7 +31,7 @@ router.get('/', async (req, res) => {
 
         if (results.rowCount === 1) {
             try {
-                await sendUnSubscribedMail(insertRows.rows[0], email);
+                await sendUnSubscribedMail(email);
             } catch (mailErr) {
                 console.error(`❌ Failed to un-subscribe email ${email}`, mailErr);
             }

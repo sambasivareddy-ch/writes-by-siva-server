@@ -39,7 +39,7 @@ router.post("/", async (req, res) => {
 
         if (insertRows.rowCount === 1) {
             try {
-                await sendSubscribedMail(insertRows.rows[0], email);
+                await sendSubscribedMail(email);
             } catch (mailErr) {
                 console.error(`❌ Failed to send subscribed email to ${email}`, mailErr);
             }

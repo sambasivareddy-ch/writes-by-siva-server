@@ -1,14 +1,12 @@
 import pug from 'pug';
 import fs from 'node:fs';
 import path from 'node:path';
-import { Resend } from 'resend';
+import resend from '../lib/resend';
 
 const templatePath = path.join(process.cwd(), '/views', 'subscribed_success.pug');
 const compileNewsletter = pug.compile(fs.readFileSync(templatePath, 'utf8'), { filename: templatePath });
 
-const resend = new Resend(process.env.RESEND_API);
-
-const sendSubscribedMail = async (post, userEmail) => {
+const sendSubscribedMail = async (userEmail) => {
     const html = compileNewsletter({
         brandName: 'BySiva',
         homepageUrl: 'https://www.bysiva.blog/',
@@ -20,7 +18,7 @@ const sendSubscribedMail = async (post, userEmail) => {
         await resend.emails.send({
             from: '"Samba Siva" <news@bysiva.blog>',
             to: userEmail,
-            subject: `New Blog: ${post.title}`,
+            subject: `🚀 You’re in! BySiva.blog updates are on the way`,
             html
         })
         return true;
