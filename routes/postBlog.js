@@ -55,9 +55,16 @@ router.route('/')
                             iv: user.email_iv,
                             tag: user.email_tag,
                           });
-                  
-                          await sendNewletterToTheSubscriber(newsletterData, decryptedEmail);
-                          console.log(`Sent to ${decryptedEmail}`);
+                          
+                          if (
+                                user['subscribed_for'].toLowerCase() === 'all' || 
+                                (user['subscribed_for'].toLowerCase() === primary.toLowerCase()) ||
+                                (primary.toLowerCase().includes(user['subscribed_for'].toLowerCase()))
+                            )
+                            {
+                                await sendNewletterToTheSubscriber(newsletterData, decryptedEmail);
+                                console.log(`Sent to ${decryptedEmail}`);
+                            }
                         } catch (err) {
                           console.error(`Failed to send to subscriber ID=${user.id}`, err);
                         }

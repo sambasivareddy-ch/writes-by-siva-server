@@ -7,7 +7,7 @@ import sendSubscribedMail from "../helpers/sendSubscribedSuccessfully.js";
 const router = Router();
 
 router.post("/", async (req, res) => {
-    const { email } = req.body;
+    const { email, subscribedFor } = req.body;
 
     const hashedEmail = hashEmail(email);
     const encrypted = encryptEmail(email);
@@ -26,14 +26,15 @@ router.post("/", async (req, res) => {
         }
 
         const insertRows = await queryPG(
-            `INSERT INTO subscribers(email_encrypted, email_iv, email_tag, email_hash, created_at)
-            VALUES($1, $2, $3, $4, $5) RETURNING *`,
+            `INSERT INTO subscribers(email_encrypted, email_iv, email_tag, email_hash, created_at, subscribed_for)
+            VALUES($1, $2, $3, $4, $5, $6) RETURNING *`,
             [
                 encrypted.encrypted,
                 encrypted.iv,
                 encrypted.tag,
                 hashedEmail,
                 new Date(),
+                subscribedFor
             ]
         );
 
