@@ -45,27 +45,29 @@ router.route('/')
             // if (!domains.contains('personal')) {
                 (async () => {
                     try {
-                        const subscribers = await queryPG(`SELECT * FROM subscribers`);
-                        const sendResults = await Promise.allSettled(
-                            subscribers.rows.map(user => {
-                                const decryptedEmail = decryptEmail({
-                                    encrypted: user.email_encrypted,
-                                    iv: user.email_iv,
-                                    tag: user.email_tag,
-                                });
-                                return sendNewletterToTheSubscriber(results.rows[0], decryptedEmail)
-                            })
-                        );
-    
-                        sendResults.forEach((result, idx) => {
-                            if (result.status === 'rejected') {
-                                console.error(`Failed to send to ${subscribers.rows[idx].email}`, result.reason);
-                            }
-                        });
+                      const subscribers = await queryPG(`SELECT * FROM subscribers`);
+                      const newsletterData = results.rows[0]; // make sure results is defined above
+                  
+                      for (const user of subscribers.rows) {
+                        try {
+                          const decryptedEmail = decryptEmail({
+                            encrypted: user.email_encrypted,
+                            iv: user.email_iv,
+                            tag: user.email_tag,
+                          });
+                  
+                          await sendNewletterToTheSubscriber(newsletterData, decryptedEmail);
+                          console.log(`Sent to ${decryptedEmail}`);
+                        } catch (err) {
+                          console.error(`Failed to send to subscriber ID=${user.id}`, err);
+                        }
+                      }
+                  
+                      console.log("Finished sending newsletter to all subscribers.");
                     } catch (err) {
-                        console.error("Newsletter sending failed", err);
+                      console.error("Newsletter sending failed", err);
                     }
-                })();
+                })();                  
             // }
 
 
