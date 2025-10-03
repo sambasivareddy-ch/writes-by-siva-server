@@ -35,15 +35,23 @@ const sendNewletterToTheSubscriber = async (post, userEmail) => {
     });
     
     try {
-        await resend.emails.send({
+        const response = await resend.emails.send({
             from: '"Samba Siva" <news@bysiva.blog>',
             to: userEmail,
             subject: `New Blog: ${post.title}`,
             html
-        })
-        return true;
-    } catch(err) {
-        return false;
+        });
+
+        if (response.error) {
+            console.error(`❌ Failed to send to ${userEmail}:`, response.error);
+            return { success: false, error: response.error };
+        }
+
+        console.log(`✅ Sent to ${userEmail}, ID=${response.id}`);
+        return { success: true, id: response.id };
+    } catch (err) {
+        console.error(`🚨 Exception while sending to ${userEmail}:`, err);
+        return { success: false, error: err };
     }
 }
 

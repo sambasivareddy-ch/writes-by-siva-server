@@ -78,11 +78,15 @@ router
                                 .toLowerCase()
                                 .includes(user["subscribed_for"].toLowerCase())
                         ) {
-                            await sendNewletterToTheSubscriber(
+                            const result = await sendNewletterToTheSubscriber(
                                 newsletterData,
                                 decryptedEmail
                             );
-                            console.log(`Sent to ${decryptedEmail}`);
+                            if (!result.success) {
+                                console.error(`Failed email log: ${decryptedEmail}`, result.error);
+                            } else {
+                                console.log(`Sent to ${decryptedEmail}`);
+                            }
                         }
                     } catch (err) {
                         console.error(
