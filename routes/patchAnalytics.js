@@ -8,7 +8,7 @@ router.patch('/:slug', async (req, res) => {
     const { slug } = req.params;
     const { type } = req.body;
 
-    const allowedFields = ['likes', 'views'];
+    const allowedFields = ['likes', 'views', 'fires'];
 
     if (!allowedFields.includes(type)) {
         return res.status(400).json({
