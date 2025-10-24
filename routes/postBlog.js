@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { queryPG } from "../db/db.js";
-import sendNewletterToTheSubscriber from "../helpers/sendNewsletter.js";
+import sendBatchNewsletterToSubscirbers from "../helpers/sendBatchNewsletter.js";
 import notifyDiscord from "../helpers/notifyDiscord.js";
 import { decryptEmail } from "../helpers/cryptEmail.js";
 
@@ -61,7 +61,8 @@ router
             try {
                 const subscribers = await queryPG(`SELECT * FROM subscribers`);
                 const newsletterData = results.rows[0]; // make sure results is defined above
-
+                
+                const subscribedSubs = [];
                 for (const user of subscribers.rows) {
                     try {
                         const decryptedEmail = decryptEmail({
@@ -78,23 +79,14 @@ router
                                 .toLowerCase()
                                 .includes(user["subscribed_for"].toLowerCase())
                         ) {
-                            const result = await sendNewletterToTheSubscriber(
-                                newsletterData,
-                                decryptedEmail
-                            );
-                            if (!result.success) {
-                                console.error(`Failed email log: ${decryptedEmail}`, result.error);
-                            } else {
-                                console.log(`Sent to ${decryptedEmail}`);
-                            }
+                            subscribedSubs.push(decryptedEmail)
                         }
                     } catch (err) {
-                        console.error(
-                            `Failed to send to subscriber ID=${user.id}`,
-                            err
-                        );
+                        console.error();
                     }
                 }
+
+                await sendBatchNewsletterToSubscirbers(subscribedSubs, newsletterData)
 
                 console.log("Finished sending newsletter to all subscribers.");
             } catch (err) {
