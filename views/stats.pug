@@ -18,10 +18,10 @@ html(lang="en")
                 h2 Blog Stats 
                 canvas#statsChart
                 .most-liked 
-                    p Most Liked Blog: 
-                        a(href=`/blogbyid/${mostliked.slug}`) #{mostliked.title} (#{mostliked.likes})
+                    p Most Reacted Blog: 
+                        a(href=`/blogbyid/${mostReacted.slug}`) #{mostReacted.title} (#{mostReacted.total_reactions})
                     p Most Viewed Blog:    
-                        a(href=`/blogbyid/${mostviewed.slug}`) #{mostviewed.title} (#{mostviewed.views})
+                        a(href=`/blogbyid/${mostViewed.slug}`) #{mostViewed.title} (#{mostViewed.views})
         
         script.
             const labels = !{labels};
