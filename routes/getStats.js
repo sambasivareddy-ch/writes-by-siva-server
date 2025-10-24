@@ -9,7 +9,10 @@ router.get('/', async (req, res) => {
             SELECT 
                 TO_CHAR(date, 'YYYY-MM') AS month,
                 SUM(views) AS total_views,
-                SUM(likes) AS total_likes
+                SUM(likes) AS total_likes,
+                SUM(fires) AS total_fires,
+                SUM(laugh) AS total_laughs,
+                SUM(anger) AS total_anger
             FROM blogs
             GROUP BY month
             ORDER BY month ASC;
@@ -35,6 +38,10 @@ router.get('/', async (req, res) => {
         const labels = stats.map(row => row.month);
         const views = stats.map(row => parseInt(row.total_views));
         const likes = stats.map(row => parseInt(row.total_likes));
+        const fires = stats.map(row => parseInt(row.total_fires));
+        const laughs = stats.map(row => parseInt(row.total_laughs));
+        const anger = stats.map(row => parseInt(row.total_anger));
+
 
         const top = mostLiked.rows[0] || { title: '', slug: '', likes: 0 };
         const topViews = mostViewed.rows[0] || { title: '', slug: '', views: 0};
@@ -43,7 +50,7 @@ router.get('/', async (req, res) => {
             admin: req.session.admin,
             labels: JSON.stringify(labels),
             views: JSON.stringify(views),
-            likes: JSON.stringify(likes),
+            reactions: JSON.stringify(likes + fires + laughs + anger),
             mostliked: top,
             mostviewed: topViews
         });

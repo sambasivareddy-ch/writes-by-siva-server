@@ -26,7 +26,7 @@ html(lang="en")
         script.
             const labels = !{labels};
             const views = !{views};
-            const likes = !{likes};
+            const reactions = !{reactions};
 
             const ctx = document.getElementById('statsChart').getContext('2d');
             new Chart(ctx, {
@@ -40,8 +40,8 @@ html(lang="en")
                             backgroundColor: 'rgba(54, 162, 235, 0.6)'
                         },
                         {
-                            label: 'Likes',
-                            data: likes,
+                            label: 'Reactions',
+                            data: reactions,
                             backgroundColor: 'rgba(255, 99, 132, 0.6)'
                         }
                     ]
