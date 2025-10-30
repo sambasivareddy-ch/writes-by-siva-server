@@ -43,6 +43,46 @@ router.get('/', async (req, res) => {
             LIMIT 1;
         `);
 
+        // Total Likes, Fires, Laugh and Anger irrespective of Month
+        const cumulative_results = await queryPG(`
+            SELECT 
+                COALESCE(SUM(likes), 0) AS total_likes,
+                COALESCE(SUM(fires), 0) AS total_fires,
+                COALESCE(SUM(laugh), 0) AS total_laughs,
+                COALESCE(SUM(anger), 0) AS total_anger
+            FROM blogs
+        `);
+
+        const cumulative = [
+            cumulative_results.rows[0].total_likes,
+            cumulative_results.rows[0].total_fires,
+            cumulative_results.rows[0].total_laughs,
+            cumulative_results.rows[0].total_anger,
+        ]
+
+        // Subscribers
+        const subscriber_results = await queryPG(`
+            SELECT
+                to_char(date_trunc('month', now()), 'YYYY-MM') AS month,
+                0 AS subscribers
+            WHERE NOT EXISTS (SELECT 1 FROM subscribers)
+            UNION ALL
+            SELECT
+                to_char(date_trunc('month', created_at), 'YYYY-MM') AS month,
+                COUNT(*) AS subscribers
+            FROM subscribers
+            GROUP BY month
+            ORDER BY month;
+        `)
+
+        const sub_stats = (subscriber_results.rows || []).map(row => ({
+            month: row.month,
+            subscribers: row.subscribers
+        }))
+
+        const month_labels = sub_stats.map(r => r.month);
+        const subscribers = sub_stats.map(r => r.subscribers);
+
         const stats = (results.rows || []).map(row => ({
             month: row.month,
             total_views: parseInt(row.total_views || 0, 10),
@@ -82,7 +122,10 @@ router.get('/', async (req, res) => {
             laughs: JSON.stringify(laughs),
             anger: JSON.stringify(anger),
             mostReacted: top,
-            mostViewed: topViews
+            mostViewed: topViews,
+            cumulative: JSON.stringify(cumulative),
+            subMonthLabels: JSON.stringify(month_labels),
+            subsMonthly: JSON.stringify(subscribers)
         });
 
     } catch (err) {

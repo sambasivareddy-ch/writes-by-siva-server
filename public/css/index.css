@@ -11,8 +11,8 @@ header {
     box-sizing: border-box;
     align-items: center;
     font-family: sans-serif;
-    background-color: #263238;
-    color: #fff;
+    background-color: #b2ebf2;
+    color: #000;
 }
 
 nav {
@@ -22,7 +22,7 @@ nav {
 }
 
 nav a {
-    color: #fff;
+    color: #000;
     text-decoration: none;
 }
 
@@ -37,8 +37,8 @@ nav a:hover {
     place-items: center;
     width: 100%;
     height: 100vh;
-    background-color: #292929;
-    color: #fff;
+    background-color: #fff;
+    color: #000;
 }
 
 .blog_post__form {
@@ -50,6 +50,7 @@ nav a:hover {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     box-sizing: border-box;
+    margin: 20px 0;
 }
 
 input {
@@ -59,8 +60,7 @@ input {
     border: solid 1px #eee;
     box-sizing: border-box;
     margin: 5px 0;
-    background-color: #212121;
-    color: #fff;
+    color: #000;
     border-radius: 2px;
 }
 
@@ -84,7 +84,7 @@ button[type="submit"]:hover {
     padding: 1rem;
     margin: auto;
     box-sizing: border-box;
-    background-color: #212121;
+    background-color: #fff;
 }
 
 /* Table Container for Horizontal Scroll */
@@ -97,7 +97,7 @@ button[type="submit"]:hover {
 table.blog_table {
     width: 100%;
     font-size: 0.95rem;
-    table-layout: fixed;
+    /* table-layout: fixed; */
     border-collapse: collapse;
 }
 
@@ -114,8 +114,9 @@ table.blog_table th {
     text-overflow: ellipsis; /* Add "..." when text overflows */
     max-width: 200px; /* You can adjust this as needed */
     font-size: 16px;
-    color: #fff;
-    border: solid 1px #616161;
+    color: #000;
+    border: solid 1px #fff;
+    border-radius: 8px;
 }
 
 /* Optional: Add tooltip for full value on hover */
@@ -130,7 +131,7 @@ table.blog_table td:hover::after {
     left: 0;
     bottom: -1.8rem;
     background-color: #000;
-    color: #fff;
+    color: #000;
     padding: 4px 8px;
     border-radius: 4px;
     white-space: normal;
@@ -140,7 +141,15 @@ table.blog_table td:hover::after {
 
 /* Row Styling */
 table.blog_table tr:nth-child(even) {
-    background-color: #303030;
+    background-color: #b3e5fc;
+}
+
+table.blog_table tr:nth-child(odd) {
+    background-color: #b2ebf2;
+}
+
+table.blog_table thead tr:nth-child(1) {
+    background-color: #1de9b6;
 }
 
 .dashboard_head {
@@ -192,7 +201,7 @@ button {
     padding: 5px;
     border-radius: 5px;
     cursor: pointer;
-    color: #fff;
+    color: #000;
 }
 
 button:hover {
@@ -241,21 +250,43 @@ button:hover {
 }
 
 .stats_wrapper {
-    width: 100%;
+    width: 90%;
     height: 100vh;
+    background-color: #fff;
+    color: #000;
+    padding: 20px;
+    margin: auto;
+}
+
+.stats {
+    width: 90%;
     display: grid;
-    place-items: center;
-    background-color: #212121;
-    color: #fff;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: 20px;
+    margin: 20px 0;
 }
 
 .stats_main {
     width: 600px;
+    height: fit-content;
+    border: solid 2px #e0f7fa;
+    padding: 10px;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.stats_main:nth-child(1) {
+    grid-row: span 3;
 }
 
 input:read-only {
     background-color: #616161;
     cursor: not-allowed;
+}
+
+.control {
+    width: fit-content;
 }
 
 @media screen and (max-width: 600px){
@@ -287,5 +318,11 @@ input:read-only {
     }
     .stats_main {
         width: 90%;
+    }
+    .stats {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
     }
 }

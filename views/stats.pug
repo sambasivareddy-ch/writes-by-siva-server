@@ -14,19 +14,24 @@ html(lang="en")
     body 
         include layout.pug 
         .stats_wrapper 
-            .stats_main 
-                h2 Blog Stats 
-                canvas#statsChart
-                .most-liked 
-                    p Most Reacted Blog: 
-                        a(href=`/blogbyid/${mostReacted.slug}`) #{mostReacted.title} (#{mostReacted.total_reactions})
-                    p Most Viewed Blog:    
-                        a(href=`/blogbyid/${mostViewed.slug}`) #{mostViewed.title} (#{mostViewed.views})
-        
+            h2 BySiva.blog Stats
+            .stats
+                .stats_main 
+                    h2 Newsletter Subscribers Stats 
+                    canvas#statsChart2
+                .stats_main 
+                    h2 Blog Stats 
+                    canvas#statsChart
+                .stats_main 
+                    h2 Cumulative Reactions
+                    canvas#statsChart1
         script.
             const labels = !{labels};
             const views = !{views};
             const reactions = !{reactions};
+            const cumulative = !{cumulative};
+            const subMonthLabels = !{subMonthLabels};
+            const subMonthly = !{subsMonthly};
 
             const ctx = document.getElementById('statsChart').getContext('2d');
             new Chart(ctx, {
@@ -37,12 +42,12 @@ html(lang="en")
                         {
                             label: 'Views',
                             data: views,
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                            backgroundColor: '#81d4fa'
                         },
                         {
                             label: 'Reactions',
                             data: reactions,
-                            backgroundColor: 'rgba(255, 99, 132, 0.6)'
+                            backgroundColor: '#80deea'
                         }
                     ]
                 },
@@ -54,5 +59,118 @@ html(lang="en")
                             text: 'Monthly Blog Engagement'
                         }
                     }
+                }
+            });
+
+            const ctx1 = document.getElementById('statsChart1').getContext('2d');
+
+            new Chart(ctx1, {
+            type: 'doughnut',
+            data: {
+                labels: ['Likes', 'Fires', 'Anger', 'Laughs'],
+                datasets: [
+                    {
+                        label: 'Engagements',
+                        data: cumulative,
+                        backgroundColor: [
+                            '#d1c4e9',
+                            '#c5cae9',
+                            '#bbdefb',
+                            '#b2dfdb'
+                        ],
+                        hoverOffset: 8,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                title: {
+                    display: true,
+                    text: 'Monthly Blog Engagement',
+                    font: {
+                    size: 18,
+                    },
+                },
+                legend: {
+                    position: 'bottom',
+                },
+                tooltip: {
+                    callbacks: {
+                    label: function (context) {
+                        const label = context.label || '';
+                        const value = context.raw || 0;
+                        const total = context.chart._metasets[0].total;
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        return `${label}: ${value} (${percentage}%)`;
+                    },
+                    },
+                },
+                },
+            },
+            });
+
+            const ctx2 = document.getElementById('statsChart2').getContext('2d');
+            new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    subMonthLabels,
+                    datasets: [
+                        {
+                            label: 'New Subscribers (per month)',
+                            data: subMonthly,
+                            fill: true,          // fills area under the line
+                            tension: 0.25,       // smoothing
+                            borderWidth: 2,
+                            pointRadius: 4,
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.12)',
+                        },
+                    ]
+                },
+                options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                    display: true,
+                    text: 'Monthly New Subscribers'
+                    },
+                    tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: (ctx) => {
+                        const v = ctx.raw ?? 0;
+                        return `${ctx.dataset.label}: ${v}`;
+                        }
+                    }
+                    },
+                    legend: {
+                    position: 'bottom'
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    intersect: false
+                },
+                scales: {
+                    x: {
+                    title: { display: true, text: 'Month' },
+                    ticks: {
+                        // rotate if many months
+                        maxRotation: 0,
+                        autoSkip: true,
+                        maxTicksLimit: 12
+                    }
+                    },
+                    y: {
+                    beginAtZero: true,
+                    title: { display: true, text: 'Subscribers' },
+                    ticks: {
+                        precision: 0 // integer ticks
+                    }
+                    }
+                }
                 }
             });

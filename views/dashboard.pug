@@ -14,51 +14,32 @@ html(lang="en")
                 table.blog_table 
                     thead 
                         tr 
-                            td Show 
-                            td Delete 
-                            td Reset 
-                            td ID
+                            td.control Controls
                             td Slug 
                             td Title 
-                            td Description
                             td Date
-                            td Primary Category
-                            td Domains
-                            td Filename
+                            td Category
                             td Views
-                            td Likes
-                            td Created At  
-                            td Updated At
-                            td Readtime
-                            td Author
-                            td Visibility
+                            td Reactions
+                            td Visible
                     tbody 
                         each row in blogs 
                             tr 
                                 td 
                                     button.view(data-id=row.slug) 
                                         i.fa-solid.fa-eye
-                                td 
                                     button.del(data-id=row.slug) 
                                         i.fa-solid.fa-trash
-                                td 
                                     button.reset(data-id=row.slug)
                                         i.fa-solid.fa-clock-rotate-left
-                                td(data-label="id") #{row.id}
-                                td(data-label="slug") #{row.slug}
+                                td(data-label="slug") 
+                                    a(href=`https://www.bysiva.blog/blog/${row.slug}`, target="_blank", rel="noopener noreferrer") #{row.slug}
                                 td(data-label="title") #{row.title}
-                                td(data-label="description") #{row.description}
-                                td(data-label="date") #{row.date}
+                                td(data-label="date") #{new Date(row.date).toISOString().slice(0, 10).replace(/-/g, '/')}
                                 td(data-label="primary_category") #{row.primary_category}
-                                td(data-label="domains") #{row.domains}
-                                td(data-label="filename") #{row.filename}
                                 td(data-label="views") #{row.views}
-                                td(data-label="likes") #{row.likes}
-                                td(data-label="created_at") #{row.created_at}
-                                td(data-label="updated_at") #{row.updated_at}
-                                td(data-label="readtime") #{row.readtime}
-                                td(data-label="author") #{row.author}
-                                td(data-lable="visible") #{row.visible}
+                                td(data-label="likes") #{row.likes + row.fires + row.anger + row.laugh} 
+                                td(data-lable="visible") #{row.visible ? 1: 0}
         
         script.
             document.addEventListener("DOMContentLoaded", function () {
