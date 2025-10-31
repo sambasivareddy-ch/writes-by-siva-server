@@ -30,3 +30,6 @@ Content-Type: application/json
 {
     "email": "sambachinta.24@gmail.com"
 }
+
+###
+GET http://localhost:5000/topblogs/tech

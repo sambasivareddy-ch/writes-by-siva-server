@@ -24,6 +24,7 @@ import subscribeRoute from "./routes/subscribeNewsletter.js";
 import editBlogRoute from "./routes/editBlog.js";
 import summarizeBlogRoute from "./routes/getAISummary.js";
 import unsubscribeRoute from './routes/unsubscribeNewsletter.js';
+import topBlogsRoute from './routes/getBlogsByPrimaryCategory.js';
 
 const app = express();
 
@@ -100,6 +101,7 @@ app.use('/edit', authCheck, editBlogRoute);
 app.use('/subscribe', subscribeRoute);
 app.use('/summarize', summarizeBlogRoute);
 app.use('/unsubscribe', unsubscribeRoute);
+app.use('/topblogs', topBlogsRoute);
 app.use("/logout", authCheck, (req, res) => {
     (req.session.admin = null), res.redirect("/");
 });
