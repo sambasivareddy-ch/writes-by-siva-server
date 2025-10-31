@@ -7,7 +7,7 @@ import {
 } from "crypto";
 
 const ENC_ALGO = "aes-256-gcm";
-const ENC_KEY = scryptSync("re_a4JWRmHi_GsvpsgrT8AiPgMBvYpriN2C1", "salt", 32);
+const ENC_KEY = scryptSync(process.env.ENCRYPTION_SECRET, "salt", 32);
 const ENC_IV_LEN = 16;
 
 const encryptEmail = (email) => {
