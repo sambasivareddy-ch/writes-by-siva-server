@@ -34,7 +34,7 @@ router.post('/:primary', async (req, res) => {
         WHERE b.primary_category = $1
         AND b.visible = true
         ORDER BY reactions DESC, domain_overlap DESC, random()
-        LIMIT 5;
+        LIMIT 10;
         `, [primary, domains]);
 
         if (results.rowCount === 0) {
