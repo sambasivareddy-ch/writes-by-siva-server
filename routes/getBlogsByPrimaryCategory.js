@@ -4,7 +4,7 @@ import { queryPG } from "../db/db.js";
 
 const router = Router();
 
-router.get('/:primary', async (req, res) => {
+router.post('/:primary', async (req, res) => {
     const { primary } = req.params;
     let { domains } = req.body;
 
