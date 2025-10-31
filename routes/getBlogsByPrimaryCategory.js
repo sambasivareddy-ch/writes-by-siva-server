@@ -6,7 +6,16 @@ const router = Router();
 
 router.get('/:primary', async (req, res) => {
     const { primary } = req.params;
-    const domains = req.body?.domains;
+    let { domains } = req.body;
+
+    if (typeof domains === 'string') {
+        // Split on commas, trim, and lower-case
+        domains = domains
+          .split(',')
+          .map(d => d.trim().toLowerCase())
+          .filter(Boolean);
+    }
+      
 
     try {
         const results = await queryPG(`
