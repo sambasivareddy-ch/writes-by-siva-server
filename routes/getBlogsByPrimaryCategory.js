@@ -13,9 +13,10 @@ router.get('/:primary', async (req, res) => {
                 slug, title, readtime, likes + fires + laugh + anger as reactions
             FROM 
                 blogs
-            WHERE primary_category = $1
+            WHERE primary_category = $1 and visible = true
             ORDER BY
-                likes + fires + laugh + anger;
+                likes + fires + laugh + anger
+            DESC;
         `, [primary]);
 
         if (results.rowCount === 0) {
