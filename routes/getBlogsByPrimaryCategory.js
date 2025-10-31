@@ -6,18 +6,27 @@ const router = Router();
 
 router.get('/:primary', async (req, res) => {
     const { primary } = req.params;
+    const domains = req.body?.domains;
 
     try {
         const results = await queryPG(`
-            SELECT 
-                slug, title, readtime, likes + fires + laugh + anger as reactions
-            FROM 
-                blogs
-            WHERE primary_category = $1 and visible = true
-            ORDER BY
-                likes + fires + laugh + anger
-            DESC;
-        `, [primary]);
+        WITH src AS (SELECT $2::text[] AS src_domains)
+        SELECT
+            b.slug,
+            b.title,
+            b.readtime,
+            (b.likes + b.fires + b.laugh + b.anger) AS reactions,
+            (
+                SELECT count(*)
+                FROM unnest(regexp_split_to_array(coalesce(b.domains, ''), '\s*,\s*')) AS d
+                WHERE lower(d) = ANY (src.src_domains)
+            )::int AS domain_overlap
+        FROM blogs b, src
+        WHERE b.primary_category = $1
+        AND b.visible = true
+        ORDER BY reactions DESC, domain_overlap DESC, random()
+        LIMIT 5;
+        `, [primary, domains]);
 
         if (results.rowCount === 0) {
             res.status(201).json({
@@ -35,7 +44,7 @@ router.get('/:primary', async (req, res) => {
     } catch(err) {
         res.status(500).json({
             success: false,
-            message: "Error occurred at server",
+            message: err,
         })
     }
 })
