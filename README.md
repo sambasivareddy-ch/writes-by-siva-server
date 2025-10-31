@@ -33,4 +33,4 @@ This is the backend server for the blogging platform. It powers the admin dashbo
 **✅ Future Improvements**
 - [ ] Role-based access for multiple admins
 - [ ] Rich-text blog editor support
-- [ ] Analytics for newsletter open/click rates
+- [x] Analytics for newsletter open/click rates
