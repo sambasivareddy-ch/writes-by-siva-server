@@ -15,13 +15,14 @@ html(lang="en")
                     input(type="text", name="slug", placeholder="Blog Slug ID", value=post.slug, readonly)
                     input(type="text", name="title", placeholder="Blog Title", value=post.title)
                     input(type="text", name="description", placeholder="Add Description", value=post.description)
+                    input(type="text", name="filename", placeholder="Filename", value=post.filename)
                     input(type="date", name="date", value=post.date)
                     select(name="primary", value=post.primary_category)
                         option(value="tech") Tech 
                         option(value="personal") Personal
                         option(value="tech-events") Tech-Events 
                     input(type="text", name="domains", placeholder="Array of Domains", value=post.domains)
-                    input(type="text", name="filename", placeholder="Filename", value=post.filename)
                     input(type="text", name="author", placeholder="Author", value=post.author)
                     input(type="text", name="visible", placeholder="Visibility", value=post.visible)
+                    input(type="text", name="sendnl", placeholder="Should I send newsletter?", readonly)
                     button(type="submit") Edit the Blog    

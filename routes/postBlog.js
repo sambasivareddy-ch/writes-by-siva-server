@@ -25,6 +25,7 @@ router
             filename,
             author,
             visible,
+            sendnl
         } = req.body;
 
         try {
@@ -58,39 +59,41 @@ router
                 return;
             }
 
-            try {
-                const subscribers = await queryPG(`SELECT * FROM subscribers`);
-                const newsletterData = results.rows[0]; // make sure results is defined above
-                
-                const subscribedSubs = [];
-                for (const user of subscribers.rows) {
-                    try {
-                        const decryptedEmail = decryptEmail({
-                            encrypted: user.email_encrypted,
-                            iv: user.email_iv,
-                            tag: user.email_tag,
-                        });
-
-                        if (
-                            user["subscribed_for"].toLowerCase() === "all" ||
-                            user["subscribed_for"].toLowerCase() ===
-                                primary.toLowerCase() ||
-                            primary
-                                .toLowerCase()
-                                .includes(user["subscribed_for"].toLowerCase())
-                        ) {
-                            subscribedSubs.push(decryptedEmail)
+            if (sendnl.toUpperCase() === 'TRUE') {
+                try {
+                    const subscribers = await queryPG(`SELECT * FROM subscribers`);
+                    const newsletterData = results.rows[0]; // make sure results is defined above
+                    
+                    const subscribedSubs = [];
+                    for (const user of subscribers.rows) {
+                        try {
+                            const decryptedEmail = decryptEmail({
+                                encrypted: user.email_encrypted,
+                                iv: user.email_iv,
+                                tag: user.email_tag,
+                            });
+    
+                            if (
+                                user["subscribed_for"].toLowerCase() === "all" ||
+                                user["subscribed_for"].toLowerCase() ===
+                                    primary.toLowerCase() ||
+                                primary
+                                    .toLowerCase()
+                                    .includes(user["subscribed_for"].toLowerCase())
+                            ) {
+                                subscribedSubs.push(decryptedEmail)
+                            }
+                        } catch (err) {
+                            console.error();
                         }
-                    } catch (err) {
-                        console.error();
                     }
+    
+                    await sendBatchNewsletterToSubscirbers(subscribedSubs, newsletterData)
+    
+                    console.log("Finished sending newsletter to all subscribers.");
+                } catch (err) {
+                    console.error("Newsletter sending failed", err);
                 }
-
-                await sendBatchNewsletterToSubscirbers(subscribedSubs, newsletterData)
-
-                console.log("Finished sending newsletter to all subscribers.");
-            } catch (err) {
-                console.error("Newsletter sending failed", err);
             }
 
             await notifyDiscord(

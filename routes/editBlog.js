@@ -5,7 +5,7 @@ import notifyDiscord from "../helpers/notifyDiscord.js";
 const router = Router();
 
 router.post('/', async (req, res) => {
-    const { slug, title, description, date, primary, domains, filename, author, visible } = req.body;
+    const { slug, title, description, date, primary, domains, filename, author, visible, sendnl } = req.body;
 
     // Convert date safely
     const safeDate = date && date.trim() !== "" ? date : null;
