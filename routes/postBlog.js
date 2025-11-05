@@ -98,7 +98,7 @@ router
 
             await notifyDiscord(
                 process.env.DISCORD_WEBHOOK,
-                `New Blog has been posted at ${new Date().toLocaleString()}} with Title: ${title}`
+                `New Blog has been posted at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}} with Title: ${title}`
             );
 
             res.redirect("/post");

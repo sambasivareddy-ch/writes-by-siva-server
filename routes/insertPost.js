@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
             return;
         }
 
-        await notifyDiscord(process.env.DISCORD_WEBHOOK, `New Blog has been posted at ${new Date().toLocaleString()}} with Title: ${title}`)
+        await notifyDiscord(process.env.DISCORD_WEBHOOK, `New Blog has been posted at ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}} with Title: ${title}`)
 
         res.redirect('/dashboard', {
             admin: req.session.admin,
