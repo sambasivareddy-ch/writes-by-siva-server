@@ -58,7 +58,7 @@ router.patch("/:slug", async (req, res) => {
                 Someone has ${
                     op === "VIEW" ? "Viewed" : "reacted with " + op + " to "
                 } your blog with title ${
-                results.row[0].title
+                results.rows[0].title
             } at ${new Date().toLocaleString("en-IN", {
                 timeZone: "Asia/Kolkata",
             })}}.
