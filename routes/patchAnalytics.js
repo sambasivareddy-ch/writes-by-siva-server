@@ -4,29 +4,32 @@ import notifyDiscord from "../helpers/notifyDiscord.js";
 
 const router = Router();
 
-router.patch('/:slug', async (req, res) => {
+router.patch("/:slug", async (req, res) => {
     const { slug } = req.params;
     const { type } = req.body;
 
-    const allowedFields = ['likes', 'views', 'fires', 'laugh', 'anger'];
+    const allowedFields = ["likes", "views", "fires", "laugh", "anger"];
 
     if (!allowedFields.includes(type)) {
         return res.status(400).json({
             success: false,
-            message: "Invalid update type"
+            message: "Invalid update type",
         });
     }
 
     try {
-        const results = await queryPG(`
+        const results = await queryPG(
+            `
             UPDATE blogs SET ${type} = COALESCE(${type}, 0) + 1, updated_at = NOW() WHERE slug = $1 RETURNING * 
-        `, [slug]);
+        `,
+            [slug]
+        );
 
         if (results.rowCount === 0) {
             res.status(201).json({
                 posts: null,
-                success: true
-            })
+                success: true,
+            });
             return;
         }
 
@@ -38,18 +41,41 @@ router.patch('/:slug', async (req, res) => {
         //     `
         // )
 
+        const op =
+            type === "likes"
+                ? "LIKE"
+                : type === "fires"
+                ? "FIRE"
+                : type === "laugh"
+                ? "LAUGH"
+                : type === "anger"
+                ? "ANGER"
+                : "VIEW";
+
+        await notifyDiscord(
+            process.env.DISCORD_WEBHOOK,
+            `
+                Someone has ${
+                    op === "VIEW" ? "Viewed" : "reacted with " + op + " to "
+                } your blog with title ${
+                results.row[0].title
+            } at ${new Date().toLocaleString("en-IN", {
+                timeZone: "Asia/Kolkata",
+            })}}.
+            `
+        );
+
         res.status(200).json({
             success: true,
             posts: results.rows,
-        })
-
-    } catch(err) {
+        });
+    } catch (err) {
         res.status(500).json({
             success: false,
             message: "Error occurred at server",
-            err
-        })
+            err,
+        });
     }
-})
+});
 
 export default router;
