@@ -25,6 +25,10 @@ import editBlogRoute from "./routes/editBlog.js";
 import summarizeBlogRoute from "./routes/getAISummary.js";
 import unsubscribeRoute from './routes/unsubscribeNewsletter.js';
 import topBlogsRoute from './routes/getBlogsByPrimaryCategory.js';
+import commentPostRoute from './routes/postComment.js';
+import commentsGetRoute from './routes/getCommentByBlogId.js';
+import commentLikeRoute from './routes/likeComment.js';
+import commentReplyRoute from './routes/replyComment.js';
 
 const app = express();
 
@@ -102,6 +106,10 @@ app.use('/subscribe', subscribeRoute);
 app.use('/summarize', summarizeBlogRoute);
 app.use('/unsubscribe', unsubscribeRoute);
 app.use('/topblogs', topBlogsRoute);
+app.use('/comment', commentPostRoute);
+app.use('/comment', commentsGetRoute);
+app.use('/comments', commentLikeRoute);
+app.use('/comments', commentReplyRoute);
 app.use("/logout", authCheck, (req, res) => {
     (req.session.admin = null), res.redirect("/");
 });
