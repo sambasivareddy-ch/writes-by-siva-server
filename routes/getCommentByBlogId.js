@@ -9,20 +9,7 @@ router.get("/:blog_slug_id", async (req, res) => {
     try {
         // Fetch all comments for this blog
         const result = await queryPG(
-            `
-            SELECT 
-                c.id AS comment_id,
-                c.comment AS message,
-                c.username,
-                c.likes,
-                c.created_at,
-                c.parent_comment_id,
-                c.uuid
-            FROM comments c
-            WHERE c.post_id = $1
-            ORDER BY c.created_at ASC
-            `,
-            [blog_slug_id]
+            `SELECT c.id AS comment_id, c.comment AS message, c.username, c.likes, c.created_at, c.parent_comment_id, c.uuid FROM comments c WHERE c.post_id = '${blog_slug_id}' ORDER BY c.created_at ASC`
         );
 
         const comments = result.rows;
