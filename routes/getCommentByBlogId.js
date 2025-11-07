@@ -7,7 +7,6 @@ router.get("/:blog_slug_id", async (req, res) => {
     const { blog_slug_id } = req.params;
 
     try {
-        console.log(`SELECT c.id AS comment_id, c.comment AS message, c.username, c.likes, c.created_at, c.parent_comment_id, c.uuid FROM comments c WHERE c.post_id = '${blog_slug_id}' ORDER BY c.created_at ASC`)
         // Fetch all comments for this blog
         const result = await queryPG(
             `SELECT c.id AS comment_id, c.comment AS message, c.username, c.likes, c.created_at, c.parent_comment_id, c.uuid FROM comments c WHERE c.post_id = '${blog_slug_id}' ORDER BY c.created_at ASC`
@@ -19,9 +18,7 @@ router.get("/:blog_slug_id", async (req, res) => {
         if (comments.length === 0) {
             return res.status(200).json(comments);
         }
-        
-        console.log(blog_slug_id, comments);
-        
+
         // Helper to build a map for quick lookup
         const commentMap = {};
         comments.forEach((comment) => {
@@ -36,14 +33,12 @@ router.get("/:blog_slug_id", async (req, res) => {
         // Build the nested structure
         const nestedComments = [];
         comments.forEach((comment) => {
-            if (comment.parent_comment_id) {
-                // Find parent and push into its thread
+            if (comment.parent_comment_id && comment.parent_comment_id !== -1) {
                 const parent = commentMap[comment.parent_comment_id];
                 if (parent) {
                     parent.thread.push(comment);
                 }
             } else {
-                // Top-level comment
                 nestedComments.push(comment);
             }
         });
