@@ -27,8 +27,10 @@ router.get("/:blog_slug_id", async (req, res) => {
 
         const comments = result.rows;
 
+        console.log(blog_slug_id);
+
         if (comments.length === 0) {
-            return res.status(200).json([]);
+            return res.status(200).json(comments);
         }
 
         // Helper to build a map for quick lookup
