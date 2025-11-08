@@ -29,6 +29,7 @@ import commentPostRoute from './routes/postComment.js';
 import commentsGetRoute from './routes/getCommentByBlogId.js';
 import commentLikeRoute from './routes/likeComment.js';
 import commentReplyRoute from './routes/replyComment.js';
+import commentDeleteRoute from './routes/deleteComment.js';
 
 const app = express();
 
@@ -110,6 +111,7 @@ app.use('/comment', commentPostRoute);
 app.use('/comment', commentsGetRoute);
 app.use('/comments', commentLikeRoute);
 app.use('/comments', commentReplyRoute);
+app.use('/comments', commentDeleteRoute);
 app.use("/logout", authCheck, (req, res) => {
     (req.session.admin = null), res.redirect("/");
 });
