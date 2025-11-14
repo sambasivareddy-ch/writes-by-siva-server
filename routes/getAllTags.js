@@ -12,6 +12,7 @@ router.get('/', async (req, res) => {
             res.status(200).json({
                 success: true,
                 tags: [],
+                eachTagCount: {}
             })
             return;
         }
@@ -25,9 +26,17 @@ router.get('/', async (req, res) => {
             )
         );
 
+        const eachTagCount = {};
+        tags.forEach((tag) => {
+            eachTagCount[tag] = rows.filter(
+                (row) => row.domains.split(",").includes(tag)
+            ).length;
+        })
+
         res.status(200).json({
             success: true,
-            tags
+            tags,
+            eachTagCount
         })
     } catch(err) {
         res.status(500).json({
