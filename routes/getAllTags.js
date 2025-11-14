@@ -8,14 +8,27 @@ router.get('/', async (req, res) => {
         const query = "SELECT domains FROM blogs;"
         const tagsResult = await queryPG(query);
 
+        if (tagsResult.rowCount === 0) {
+            res.status(200).json({
+                success: true,
+                tags: [],
+            })
+            return;
+        }
+
         const rows = tagsResult.rows;
+        const tags = Array.from(
+            new Set(
+                rows.flatMap((domains) =>
+                    domains.split(",")
+                )
+            )
+        );
 
-        const domains = rows.flatMap(row => row.domain.split(",")).map(d => d.trim().toLowerCase()).filter(d => d.length > 0);
-
-        // Get unique values
-        const uniqueDomains = [...new Set(domains)];
-
-        res.json({ domains: uniqueDomains });
+        res.status(200).json({
+            success: true,
+            tags
+        })
     } catch(err) {
         res.status(500).json({
             success: false,
