@@ -5,20 +5,25 @@ const router = Router();
 
 router.get("/", async (req, res) => {
     try {
-        // parse + defaults
-        let { tags, page = 1, limit = 10, sort_by = "date", order = "DESC", include = false } = req.query;
+        let {
+            tags,
+            page = 1,
+            limit = 10,
+            sort_by = "date",
+            order = "DESC",
+            include = "false",
+        } = req.query;
         page = Number.parseInt(page, 10) || 1;
         limit = Number.parseInt(limit, 10) || 10;
         const offset = (page - 1) * limit;
 
-        // sanitize/validate
+        // sanitize sort/order
         const sortMap = {
             date: "date",
             views: "views",
-            reactions: "likes",
+            reactions: "likes", // adjust if your DB column is different
         };
         const sortColumn = sortMap[sort_by] || sortMap.date;
-
         order = String(order).toUpperCase();
         if (!["ASC", "DESC"].includes(order)) order = "DESC";
 
@@ -30,34 +35,41 @@ router.get("/", async (req, res) => {
                   .filter(Boolean)
             : [];
 
-        // build WHERE and params dynamically
-        const whereClauses = [];
+        // build WHERE and params safely (parameterized)
+        const whereParts = ["visible = true"];
         const params = [];
 
         if (tagList.length > 0) {
-            tagList.forEach(tag => {
-                whereClauses.push(`domain ILIKE '%${tag}%'`);
-            })
+            // If your tags are stored as plain text within `domain` column:
+            const tagClauses = tagList.map((tag) => {
+                params.push(`%${tag}%`);
+                return `domain ILIKE $${params.length}`;
+            });
+            const joiner =
+                String(include).toLowerCase() === "true" ? " AND " : " OR ";
+            whereParts.push(`(${tagClauses.join(joiner)})`);
         }
 
-        // total count query (respects same filters)
-        const totalQuery = `SELECT COUNT(*)::int AS total FROM blogs WHERE visible = true AND (${whereClauses.join(
-            include ? " AND ": " OR "
-        )})`;
-        const totalResult = await queryPG(totalQuery, params);
-        const total = totalResult.rows.length ? totalResult.rows[0].total : 0;
+        const whereSQL = whereParts.join(" AND ");
 
-        // add pagination params (limit, offset)
+        // total count (uses same params as filter; do NOT add limit/offset yet)
+        const totalQuery = `SELECT COUNT(*)::int AS total FROM blogs WHERE ${whereSQL}`;
+        const totalResult = await queryPG(totalQuery, params);
+        const total = totalResult.rows?.[0]?.total ?? 0;
+
+        // now append pagination params
         params.push(limit);
         params.push(offset);
+        const limitParamIndex = params.length - 1; // index of limit in 1-based $n
+        const offsetParamIndex = params.length; // index of offset
 
         const dataQuery = `
-                SELECT *
-                FROM blogs
-                WHERE visible = true AND (${whereClauses.join(include ? " AND ": " OR ")})
-                ORDER BY ${sortColumn} ${order}
-                LIMIT $${params.length - 1} OFFSET $${params.length}
-              `;
+      SELECT *
+      FROM blogs
+      WHERE ${whereSQL}
+      ORDER BY ${sortColumn} ${order}
+      LIMIT $${limitParamIndex} OFFSET $${offsetParamIndex}
+    `;
 
         const dataResult = await queryPG(dataQuery, params);
 
