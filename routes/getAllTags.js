@@ -10,10 +10,7 @@ router.get('/', async (req, res) => {
 
         const rows = tagsResult.rows;
 
-        const domains = rows
-                .flatMap(row => row.domain.split(","))
-                .map(d => d.trim().toLowerCase())
-                .filter(d => d.length > 0);
+        const domains = rows.flatMap(row => row.domain.split(",")).map(d => d.trim().toLowerCase()).filter(d => d.length > 0);
 
         // Get unique values
         const uniqueDomains = [...new Set(domains)];
