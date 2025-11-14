@@ -5,7 +5,7 @@ const router = Router();
 
 router.get('/', async (req, res) => {
     try {
-        const query = "SELECT domains FROM blogs;"
+        const query = "SELECT domains FROM blogs WHERE visible = true;"
         const tagsResult = await queryPG(query);
 
         if (tagsResult.rowCount === 0) {
