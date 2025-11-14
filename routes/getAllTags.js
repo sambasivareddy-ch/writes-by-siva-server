@@ -19,8 +19,8 @@ router.get('/', async (req, res) => {
         const rows = tagsResult.rows;
         const tags = Array.from(
             new Set(
-                rows.flatMap((domains) =>
-                    domains.split(",")
+                rows.flatMap((row) =>
+                    row.domains.split(",")
                 )
             )
         );

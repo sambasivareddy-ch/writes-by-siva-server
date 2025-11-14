@@ -40,4 +40,4 @@ Content-Type: application/json
 }
 
 ###
-GET https://writes-by-siva-server-production.up.railway.app/tags
+GET https://writes-by-siva-server-production.up.railway.app/blogs
