@@ -43,7 +43,7 @@ router.get("/", async (req, res) => {
             // If your tags are stored as plain text within `domain` column:
             const tagClauses = tagList.map((tag) => {
                 params.push(`%${tag}%`);
-                return `domain ILIKE $${params.length}`;
+                return `domains ILIKE $${params.length}`;
             });
             const joiner =
                 String(include).toLowerCase() === "true" ? " AND " : " OR ";
