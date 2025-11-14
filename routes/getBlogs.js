@@ -6,7 +6,7 @@ const router = Router();
 router.get("/", async (req, res) => {
     try {
         // parse + defaults
-        let { tags, page = 1, limit = 10, sort_by = "date", order = "DESC" } = req.query;
+        let { tags, page = 1, limit = 10, sort_by = "date", order = "DESC", include = false } = req.query;
         page = Number.parseInt(page, 10) || 1;
         limit = Number.parseInt(limit, 10) || 10;
         const offset = (page - 1) * limit;
@@ -31,22 +31,19 @@ router.get("/", async (req, res) => {
             : [];
 
         // build WHERE and params dynamically
-        const whereClauses = ["visible = true"];
+        const whereClauses = [];
         const params = [];
 
         if (tagList.length > 0) {
-            // pass tagList as text[] and use regexp_split_to_array to split & trim stored CSV
-            params.push(tagList); // will be referenced as $1 (or appropriate index)
-            whereClauses.push(
-                // split domains by commas (trims surrounding whitespace), lowercase, then check overlap
-                `regexp_split_to_array(lower(domains), '\\\\s*,\\\\s*') && $${params.length}::text[]`
-            );
+            tagList.forEach(tag => {
+                whereClauses.push(`domain ILIKE '%${tag}%'`);
+            })
         }
 
         // total count query (respects same filters)
-        const totalQuery = `SELECT COUNT(*)::int AS total FROM blogs WHERE ${whereClauses.join(
-            " AND "
-        )}`;
+        const totalQuery = `SELECT COUNT(*)::int AS total FROM blogs WHERE visible = true AND (${whereClauses.join(
+            include ? " AND ": " OR "
+        )})`;
         const totalResult = await queryPG(totalQuery, params);
         const total = totalResult.rows.length ? totalResult.rows[0].total : 0;
 
@@ -57,7 +54,7 @@ router.get("/", async (req, res) => {
         const dataQuery = `
                 SELECT *
                 FROM blogs
-                WHERE ${whereClauses.join(" AND ")}
+                WHERE visible = true AND (${whereClauses.join(include ? " AND ": " OR ")})
                 ORDER BY ${sortColumn} ${order}
                 LIMIT $${params.length - 1} OFFSET $${params.length}
               `;
