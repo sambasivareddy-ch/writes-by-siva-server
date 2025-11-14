@@ -6,7 +6,7 @@ const router = Router();
 router.get("/", async (req, res) => {
     try {
         // parse + defaults
-        let { tags, page = 1, limit = 10, sort_by = "date", order = "DESC", } = req.query;
+        let { tags, page = 1, limit = 10, sort_by = "date", order = "DESC" } = req.query;
         page = Number.parseInt(page, 10) || 1;
         limit = Number.parseInt(limit, 10) || 10;
         const offset = (page - 1) * limit;
@@ -22,21 +22,25 @@ router.get("/", async (req, res) => {
         order = String(order).toUpperCase();
         if (!["ASC", "DESC"].includes(order)) order = "DESC";
 
-        // tags -> array
+        // tags -> array of lowercase trimmed strings
         const tagList = tags
             ? String(tags)
                   .split(",")
-                  .map((t) => t.trim())
+                  .map((t) => t.trim().toLowerCase())
                   .filter(Boolean)
             : [];
 
-        // build WHERE and params dynamically so $ positions are correct
+        // build WHERE and params dynamically
         const whereClauses = ["visible = true"];
         const params = [];
 
         if (tagList.length > 0) {
-            params.push(tagList); // will be $1 if first param
-            whereClauses.push(`domains = ANY($${params.length})`);
+            // pass tagList as text[] and use regexp_split_to_array to split & trim stored CSV
+            params.push(tagList); // will be referenced as $1 (or appropriate index)
+            whereClauses.push(
+                // split domains by commas (trims surrounding whitespace), lowercase, then check overlap
+                `regexp_split_to_array(lower(domains), '\\\\s*,\\\\s*') && $${params.length}::text[]`
+            );
         }
 
         // total count query (respects same filters)
@@ -46,9 +50,9 @@ router.get("/", async (req, res) => {
         const totalResult = await queryPG(totalQuery, params);
         const total = totalResult.rows.length ? totalResult.rows[0].total : 0;
 
-        // now add pagination params (limit, offset) - their param indexes depend on previous params length
-        params.push(limit); // e.g. $n
-        params.push(offset); // $n+1
+        // add pagination params (limit, offset)
+        params.push(limit);
+        params.push(offset);
 
         const dataQuery = `
                 SELECT *
