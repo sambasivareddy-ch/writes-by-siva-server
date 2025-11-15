@@ -4,9 +4,22 @@ import { queryPG } from '../db/db.js';
 const router = Router();
 
 router.get('/', async (req, res) => {
+    const { primary = 'all' } = req.query;
+
     try {
-        const query = "SELECT domains FROM blogs WHERE visible = true;"
-        const tagsResult = await queryPG(query);
+        const whereParts = ["visible = true"];
+        const params = [];
+
+        if (primary !== 'all') {
+            params.push(`${primary}`);
+            whereParts.push(`primary_category = ${params.length}`)
+        }
+
+        const whereSQL = whereParts.join(" AND ");
+
+        const query = `SELECT domains FROM blogs WHERE ${whereSQL}`;
+
+        const tagsResult = await queryPG(query, params);
 
         if (tagsResult.rowCount === 0) {
             res.status(200).json({

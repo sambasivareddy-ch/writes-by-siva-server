@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
             sort_by = "date",
             order = "DESC",
             include = "false",
+            primary = "all"
         } = req.query;
         page = Number.parseInt(page, 10) || 1;
         limit = Number.parseInt(limit, 10) || 10;
@@ -48,6 +49,11 @@ router.get("/", async (req, res) => {
             const joiner =
                 String(include).toLowerCase() === "true" ? " AND " : " OR ";
             whereParts.push(`(${tagClauses.join(joiner)})`);
+        }
+
+        if (primary !== 'all') {
+            params.push(`${primary}`);
+            whereParts.push(`primary_category = ${params.length}`)
         }
 
         const whereSQL = whereParts.join(" AND ");
