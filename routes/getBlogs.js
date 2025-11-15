@@ -7,7 +7,6 @@ router.get("/", async (req, res) => {
     try {
         let {
             tags,
-            primary = null,
             page = 1,
             limit = 10,
             sort_by = "date",
@@ -39,10 +38,6 @@ router.get("/", async (req, res) => {
         // build WHERE and params safely (parameterized)
         const whereParts = ["visible = true"];
         const params = [];
-
-        if (primary) {
-          whereParts.push(`primary_category = ${primary}`)
-        }
 
         if (tagList.length > 0) {
             // If your tags are stored as plain text within `domain` column:

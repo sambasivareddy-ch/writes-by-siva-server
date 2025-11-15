@@ -4,14 +4,8 @@ import { queryPG } from '../db/db.js';
 const router = Router();
 
 router.get('/', async (req, res) => {
-    const { primary = null } = req.query;
     try {
-        let query = "SELECT domains FROM blogs WHERE visible = true";
-
-        if (primary) {
-            query += ` AND primary_category = ${primary}`
-        }
-
+        const query = "SELECT domains FROM blogs WHERE visible = true;"
         const tagsResult = await queryPG(query);
 
         if (tagsResult.rowCount === 0) {
