@@ -53,7 +53,7 @@ router.get("/", async (req, res) => {
 
         if (primary !== 'all') {
             params.push(`${primary}`);
-            whereParts.push(`primary_category = ${params.length}`)
+            whereParts.push(`primary_category = $${params.length}`)
         }
 
         const whereSQL = whereParts.join(" AND ");
