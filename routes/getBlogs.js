@@ -24,9 +24,13 @@ router.get("/", async (req, res) => {
             views: "views",
             reactions: "likes", // adjust if your DB column is different
         };
-        const sortColumn = sortMap[sort_by] || sortMap.date;
+        let sortColumn = sortMap[sort_by] || sortMap.date;
         order = String(order).toUpperCase();
         if (!["ASC", "DESC"].includes(order)) order = "DESC";
+
+        if (sort_by === 'reactions') {
+            sortColumn = "likes + fires + anger + laugh";
+        }
 
         // tags -> array of lowercase trimmed strings
         const tagList = tags
@@ -70,12 +74,12 @@ router.get("/", async (req, res) => {
         const offsetParamIndex = params.length; // index of offset
 
         const dataQuery = `
-      SELECT *
-      FROM blogs
-      WHERE ${whereSQL}
-      ORDER BY ${sortColumn} ${order}
-      LIMIT $${limitParamIndex} OFFSET $${offsetParamIndex}
-    `;
+                    SELECT *
+                    FROM blogs
+                    WHERE ${whereSQL}
+                    ORDER BY ${sortColumn} ${order}
+                    LIMIT $${limitParamIndex} OFFSET $${offsetParamIndex}
+                `;
 
         const dataResult = await queryPG(dataQuery, params);
 
